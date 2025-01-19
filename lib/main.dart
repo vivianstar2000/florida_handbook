@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),  // スプラッシュ画面から遷移
+      home: SplashScreen(),
     );
   }
 }
@@ -53,15 +52,22 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: _navigateToHomeScreen,
-        child: Scaffold(
-          body: Center(
+    return Scaffold(
+      body: SafeArea(  // SafeAreaを追加してノッチ部分の対応
+        child: GestureDetector(
+          onTap: _navigateToHomeScreen,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/handbook表紙.jpg'),
+                fit: BoxFit.cover,  // 画面全体にフィット
+              ),
+            ),
+            width: double.infinity,
+            height: double.infinity,
             child: AnimatedOpacity(
               opacity: _isTapped ? 0.0 : 1.0,
               duration: Duration(seconds: 1),
-              child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
             ),
           ),
         ),
