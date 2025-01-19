@@ -3,18 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
+
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // WebではSystemChromeを適用せず、モバイルのみ適用
-  if (!kIsWeb) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // ステータスバーを透明に
-      statusBarIconBrightness: Brightness.dark, // アイコンの色（明るい背景ならdark）
-    ));
-  }
-
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -62,14 +53,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _navigateToHomeScreen,
-      child: Scaffold(
-        body: Center(
-          child: AnimatedOpacity(
-            opacity: _isTapped ? 0.0 : 1.0,
-            duration: Duration(seconds: 1),
-            child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
+    return SafeArea(
+      child: GestureDetector(
+        onTap: _navigateToHomeScreen,
+        child: Scaffold(
+          body: Center(
+            child: AnimatedOpacity(
+              opacity: _isTapped ? 0.0 : 1.0,
+              duration: Duration(seconds: 1),
+              child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
+            ),
           ),
         ),
       ),
