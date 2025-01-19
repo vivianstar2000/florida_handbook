@@ -4,6 +4,13 @@ import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // ステータスバーとナビゲーションバーを非表示にする（モバイル用）
+  if (!kIsWeb) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
   runApp(const MyApp());
 }
 
@@ -50,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _navigateToHomeScreen,

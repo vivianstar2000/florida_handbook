@@ -6,8 +6,8 @@
 
   <!-- iOS PWA向けの設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -26,8 +26,8 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* iPhoneのステータスバーの白い部分対策 */
-    html, body {
+   /* iPhoneのステータスバーの白い部分対策 */
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -36,10 +36,14 @@
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  overflow: hidden; /* スクロールの発生を防ぐ */
 }
 
-    /* iPhoneのノッチやステータスバーの余白対策 */
-    .app-container {
+/* iPhoneのノッチやステータスバーの余白対策 */
+.app-container {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: 100vw;
   padding-top: env(safe-area-inset-top, 0);
