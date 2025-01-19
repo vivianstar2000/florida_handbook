@@ -41,3 +41,5 @@ jobs:
           publish_dir: ./build/web  # ビルドされたWebアプリのディレクトリ
           publish_branch: gh-pages  # デプロイ先をgh-pagesブランチに変更
           force_orphan: true  # 以前の履歴を消して新しいものにする
+          user_name: "github-actions[bot]"  # Botユーザーを明示的に指定
+          user_email: "github-actions[bot]@users.noreply.github.com"
