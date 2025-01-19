@@ -19,8 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void _hideStatusBar() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,  // ステータスバーを完全に透明に
-      systemNavigationBarColor: Colors.transparent, // ナビゲーションバーも透明化
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
     ));
   }
 
@@ -30,10 +30,9 @@ class _SplashScreenState extends State<SplashScreen> {
     });
 
     Future.delayed(Duration(milliseconds: 300), () {
-      // ホーム画面に遷移後、ステータスバーの色を戻す
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Color(0xFFF6F2F0),  // ホーム画面のステータスバー色
+        statusBarColor: Color(0xFFF6F2F0),
         statusBarIconBrightness: Brightness.dark,
       ));
 
@@ -62,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Positioned.fill(
               child: Image.asset(
                 'assets/handbook表紙.jpg',
-                fit: BoxFit.cover,  // 画面全体にフィット
+                fit: BoxFit.cover,
               ),
             ),
             AnimatedOpacity(
