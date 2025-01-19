@@ -4,8 +4,8 @@
     "description": "A new Flutter project.",
     "start_url": "/florida_handbook/",
     "display": "fullscreen",
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#000000",
+    "background_color": "#000000",
     "icons": [
       {
         "src": "icons/Icon-192.png",
@@ -19,4 +19,5 @@
       }
     ]
   }
+  
   

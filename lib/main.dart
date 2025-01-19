@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
 void main() {
+  // モバイル端末でステータスバーを非表示にする
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(const MyApp());
 }
 
@@ -53,22 +56,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        minimum: EdgeInsets.zero,  // ステータスバーの余白を最小化
-        child: GestureDetector(
-          onTap: _navigateToHomeScreen,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/handbook表紙.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            width: double.infinity,
-            height: double.infinity,
-            child: AnimatedOpacity(
-              opacity: _isTapped ? 0.0 : 1.0,
-              duration: Duration(seconds: 1),
+      body: GestureDetector(
+        onTap: _navigateToHomeScreen,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/handbook表紙.jpg'),
+              fit: BoxFit.cover,
             ),
           ),
         ),
