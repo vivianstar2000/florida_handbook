@@ -27,7 +27,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Web App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Color(0xFFF6F2F0),  // 全画面共通の背景色
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFFF6F2F0),  // AppBarの背景色
+          elevation: 0,  // シャドウなし
+          iconTheme: IconThemeData(color: Colors.black),  // アイコンの色
+        ),
       ),
       initialRoute: '/',
       routes: {

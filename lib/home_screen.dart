@@ -27,7 +27,12 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('ホーム画面'),
+        title: Text('home',
+        style: TextStyle(
+      fontFamily: 'Merriweather',  // ここで設定
+      fontSize: 24,           // フォントサイズを調整
+      fontWeight: FontWeight.bold,  // 太字
+      ),),
         backgroundColor: Color(0xFFF6F2F0),
       ),
       backgroundColor: Color(0xFFF6F2F0),
@@ -42,48 +47,42 @@ class HomeScreen extends StatelessWidget {
           ),
           itemCount: menuItems.length,
           itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, menuItems[index]['route']!);
-              },
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-  child: ClipRRect(
-    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-    child: Image.asset(
-      menuItems[index]['image']!,
-      fit: BoxFit.cover,
-      width: double.infinity,
-      errorBuilder: (context, error, stackTrace) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.error, color: Colors.red, size: 50),
-            Text('画像が見つかりません'),
-          ],
-        );
-      },
-    ),
-  ),
-),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        menuItems[index]['title']!,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+  return Column(
+    children: [
+      Material(
+        elevation: 6,  // 浮いているような影を追加
+        borderRadius: BorderRadius.circular(12),  // 角の丸み
+        child: InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, menuItems[index]['route']!);
           },
+          borderRadius: BorderRadius.circular(12),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.asset(
+              menuItems[index]['image']!,
+              fit: BoxFit.cover,
+              width: double.infinity,  // 幅いっぱい
+              height: 120,  // 画像の高さ指定
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(height: 12),  // 画像とテキストの間隔
+      Text(
+        menuItems[index]['title']!,
+        style: TextStyle(
+    fontFamily: 'Roboto',  // ここでフォントを適用
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.black87,
+  ),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
+},
+
         ),
       ),
     );

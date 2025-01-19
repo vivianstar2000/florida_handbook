@@ -101,6 +101,26 @@ flutter:
     - assets/english.jpg
     - assets/family.jpg
 
+  fonts:
+    - family: Merriweather
+      fonts:
+        - asset: assets/fonts/Merriweather-Regular.ttf
+        - asset: assets/fonts/Merriweather-Bold.ttf
+          weight: 700
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito-Italic-VariableFont_wght.ttf
+        - asset: assets/fonts/Nunito-VariableFont_wght.ttf
+          weight: 700
+    - family: Itim
+      fonts:
+        - asset: assets/fonts/Itim-Regular.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf
+        - asset: assets/fonts/Roboto-VariableFont_wdth,wght.ttf
+          weight: 700
+
 
 
 
