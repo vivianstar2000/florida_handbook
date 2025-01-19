@@ -61,40 +61,37 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
 Widget build(BuildContext context) {
+  double statusBarHeight = MediaQuery.of(context).padding.top;
+
   return GestureDetector(
     onTap: _navigateToHomeScreen,
     child: Scaffold(
-      body: Column(
+      body: Stack(
         children: [
-          // ステータスバーの高さ分、画像でカバー
-          Container(
-            height: MediaQuery.of(context).padding.top,  // ステータスバーの高さ
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/handbook表紙.jpg'),
-                fit: BoxFit.cover,
-              ),
+          Positioned.fill(
+            child: Image.asset(
+              'assets/handbook表紙.jpg',
+              fit: BoxFit.cover,  // 画面全体にフィット
             ),
           ),
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/handbook表紙.jpg',
-                    fit: BoxFit.cover,  // 画面全体にフィット
-                  ),
-                ),
-                AnimatedOpacity(
-                  opacity: _isTapped ? 0.0 : 1.0,
-                  duration: Duration(seconds: 1),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    color: Colors.transparent,
-                  ),
-                ),
-              ],
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: statusBarHeight,  // ステータスバーの高さ分の画像
+            child: Image.asset(
+              'assets/handbook表紙.jpg',
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          AnimatedOpacity(
+            opacity: _isTapped ? 0.0 : 1.0,
+            duration: Duration(seconds: 1),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.transparent,
             ),
           ),
         ],
