@@ -7,7 +7,10 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   if (!kIsWeb) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge); 
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(0xFFF6F2F0),  // ステータスバーの色
+      statusBarIconBrightness: Brightness.dark,  // アイコンの色（ダーク）
+    ));
   }
 
   runApp(const MyApp());
@@ -57,30 +60,46 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _navigateToHomeScreen,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/handbook表紙.jpg',
-                fit: BoxFit.cover,  // 画面全体にフィット
+Widget build(BuildContext context) {
+  return GestureDetector(
+    onTap: _navigateToHomeScreen,
+    child: Scaffold(
+      body: Column(
+        children: [
+          // ステータスバーの高さ分、画像でカバー
+          Container(
+            height: MediaQuery.of(context).padding.top,  // ステータスバーの高さ
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/handbook表紙.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
-            AnimatedOpacity(
-              opacity: _isTapped ? 0.0 : 1.0,
-              duration: Duration(seconds: 1),
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                color: Colors.transparent,
-              ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/handbook表紙.jpg',
+                    fit: BoxFit.cover,  // 画面全体にフィット
+                  ),
+                ),
+                AnimatedOpacity(
+                  opacity: _isTapped ? 0.0 : 1.0,
+                  duration: Duration(seconds: 1),
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    color: Colors.transparent,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
