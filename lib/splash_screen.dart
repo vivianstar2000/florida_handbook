@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,17 +13,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,  // ステータスバーを透明に
-      statusBarIconBrightness: Brightness.light,
-    ));
+    _hideStatusBar();
+  }
+
+  void _hideStatusBar() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   void _navigateToHomeScreen() {
     setState(() {
       _isTapped = true;
     });
+
     Future.delayed(Duration(milliseconds: 300), () {
+      // ホーム画面に遷移後、ステータスバーを再表示
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Color(0xFFF6F2F0),  // ホーム画面のステータスバー色
+        statusBarIconBrightness: Brightness.dark,  // アイコンの色
+      ));
+
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
@@ -40,8 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double statusBarHeight = MediaQuery.of(context).padding.top;
-
     return GestureDetector(
       onTap: _navigateToHomeScreen,
       child: Scaffold(
@@ -51,17 +59,6 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Image.asset(
                 'assets/handbook表紙.jpg',
                 fit: BoxFit.cover,  // 画面全体にフィット
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: statusBarHeight,  // ステータスバーの部分
-              child: Image.asset(
-                'assets/handbook表紙.jpg',
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,  // 画像の上部をステータスバーに適用
               ),
             ),
             AnimatedOpacity(
