@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
 void main() {
-  // モバイル端末でステータスバーを非表示にする
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  // iOS向けにステータスバーを非表示にする設定
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
   runApp(const MyApp());
 }
@@ -59,8 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: GestureDetector(
         onTap: _navigateToHomeScreen,
         child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          height: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/handbook表紙.jpg'),

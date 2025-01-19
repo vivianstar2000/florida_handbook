@@ -3,13 +3,13 @@
 <head>
   <base href="$FLUTTER_BASE_HREF">
 
-  <!-- iOS PWA向けの設定 -->
+  <!-- iOS PWA設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta charset="UTF-8">
   <meta name="description" content="A new Flutter project.">
-  <meta name="theme-color" content="#000000"> 
+  <meta name="theme-color" content="#000000"> <!-- テーマカラーを黒で統一 -->
 
   <!-- iOS アイコン設定 -->
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
@@ -23,22 +23,22 @@
       height: 100vh;
       background-color: #000000;
       overflow: hidden;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
       touch-action: manipulation;
     }
 
+    /* iPhoneのノッチ部分対策 */
     .app-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      padding-top: env(safe-area-inset-top);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
       box-sizing: border-box;
     }
 
+    /* スプラッシュ画面の表示 */
     .splash-screen {
       position: fixed;
       top: 0;
