@@ -1,8 +1,20 @@
+import 'package:flutter/foundation.dart' show kIsWeb;  // Web判定用
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // WebではSystemChromeを適用せず、モバイルのみ適用
+  if (!kIsWeb) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // ステータスバーを透明に
+      statusBarIconBrightness: Brightness.dark, // アイコンの色（明るい背景ならdark）
+    ));
+  }
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
