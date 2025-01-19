@@ -54,15 +54,24 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                        child: Image.asset(
-                          menuItems[index]['image']!,
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                        ),
-                      ),
-                    ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+    child: Image.asset(
+      menuItems[index]['image']!,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      errorBuilder: (context, error, stackTrace) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error, color: Colors.red, size: 50),
+            Text('画像が見つかりません'),
+          ],
+        );
+      },
+    ),
+  ),
+),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
