@@ -39,4 +39,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}  # GitHubトークンで認証
           publish_dir: ./build/web  # ビルドされたWebアプリのディレクトリ
-          publish_branch: main  # mainブランチにデプロイ
+          publish_branch: gh-pages  # デプロイ先をgh-pagesブランチに変更
+          force_orphan: true  # 以前の履歴を消して新しいものにする
