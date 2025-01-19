@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Ubuntu環境で実行
+    runs-on: ubuntu-22.04  # 環境を明示的に指定
 
     steps:
       - name: チェックアウトリポジトリ
