@@ -1,14 +1,13 @@
-import 'package:flutter/foundation.dart' show kIsWeb;  // Web判定用
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'home_screen.dart';  // 追加
+import 'home_screen.dart';  
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ステータスバーとナビゲーションバーを非表示にする（モバイル用）
   if (!kIsWeb) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge); 
   }
 
   runApp(const MyApp());
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),  // スプラッシュ画面から遷移
+      home: SplashScreen(),
     );
   }
 }
