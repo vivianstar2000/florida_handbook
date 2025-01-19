@@ -26,32 +26,37 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* iPhoneのステータスバーの白い部分対策 */
+    /* 全画面表示の調整 */
     html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
-      background-color: #ffffff; /* 背景色を白に設定 */
+      background-color: #ffffff;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-
-    /* iPhoneのノッチやステータスバーの余白対策 */
+  
+    /* iPhoneのセーフエリア対応 */
     .app-container {
       height: 100vh;
+      width: 100vw;
       padding-top: env(safe-area-inset-top, 0);
       padding-bottom: env(safe-area-inset-bottom, 0);
       padding-left: env(safe-area-inset-left, 0);
       padding-right: env(safe-area-inset-right, 0);
       box-sizing: border-box;
     }
-
-    /* Safariのズーム制御を無効化 */
-    body {
-      touch-action: pan-x pan-y;
-      overscroll-behavior: none;
+  
+    /* 表紙画像をフルスクリーンに設定 */
+    .splash-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url('assets/handbook表紙.jpg') no-repeat center center/cover;
     }
   </style>
 </head>
