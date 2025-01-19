@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_screen.dart';  // 追加
 
 void main() {
   runApp(const MyApp());
@@ -14,22 +15,49 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(title: Text('デザイン変更テスト')),
+      home: SplashScreen(),  // スプラッシュ画面から遷移
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool _isTapped = false;
+
+  void _navigateToHomeScreen() {
+    setState(() {
+      _isTapped = true;
+    });
+    Future.delayed(Duration(milliseconds: 300), () {
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation,
+              child: child,
+            );
+          },
+          transitionDuration: Duration(seconds: 1),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _navigateToHomeScreen,
+      child: Scaffold(
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Hello, Flutter Web!',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('ボタンを追加してみる'),
-              ),
-            ],
+          child: AnimatedOpacity(
+            opacity: _isTapped ? 0.0 : 1.0,
+            duration: Duration(seconds: 1),
+            child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
           ),
         ),
       ),
