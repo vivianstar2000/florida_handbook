@@ -1,18 +1,20 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'home_screen.dart';  
+import 'home_screen.dart';
+import 'pages/schedule_list.dart';
+import 'pages/plan_details.dart';
+import 'pages/items.dart';
+import 'pages/precautions.dart';
+import 'pages/english_conversation.dart';
+import 'pages/family_list.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if (!kIsWeb) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFF6F2F0),  // ステータスバーの色
-      statusBarIconBrightness: Brightness.dark,  // アイコンの色（ダーク）
-    ));
-  }
-
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,  // ステータスバーを透明にする
+    statusBarIconBrightness: Brightness.light,  // アイコンを白に
+  ));
   runApp(const MyApp());
 }
 
@@ -26,77 +28,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/home': (context) => HomeScreen(),
+        '/schedule': (context) => ScheduleListPage(),
+        '/plan': (context) => PlanDetailsPage(),
+        '/items': (context) => ItemsPage(),
+        '/precautions': (context) => PrecautionsPage(),
+        '/english': (context) => EnglishConversationPage(),
+        '/family': (context) => FamilyListPage(),
+      },
     );
   }
-}
-
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  bool _isTapped = false;
-
-  void _navigateToHomeScreen() {
-    setState(() {
-      _isTapped = true;
-    });
-    Future.delayed(Duration(milliseconds: 300), () {
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => HomeScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
-          },
-          transitionDuration: Duration(seconds: 1),
-        ),
-      );
-    });
-  }
-
-  @override
-Widget build(BuildContext context) {
-  double statusBarHeight = MediaQuery.of(context).padding.top;
-
-  return GestureDetector(
-    onTap: _navigateToHomeScreen,
-    child: Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/handbook表紙.jpg',
-              fit: BoxFit.cover,  // 画面全体にフィット
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: statusBarHeight,  // ステータスバー領域をカバー
-            child: Image.asset(
-              'assets/handbook表紙.jpg',
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,  // 画像の上部を表示
-            ),
-          ),
-          AnimatedOpacity(
-            opacity: _isTapped ? 0.0 : 1.0,
-            duration: Duration(seconds: 1),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: Colors.transparent,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
 }
