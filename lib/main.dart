@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'home_screen.dart';  // 追加
 
 void main() {
-  // iOS向けにステータスバーを非表示にする設定
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-
   runApp(const MyApp());
 }
 
@@ -20,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: SplashScreen(),  // スプラッシュ画面から遷移
     );
   }
 }
@@ -55,16 +52,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
+    return SafeArea(
+      child: GestureDetector(
         onTap: _navigateToHomeScreen,
-        child: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/handbook表紙.jpg'),
-              fit: BoxFit.cover,
+        child: Scaffold(
+          body: Center(
+            child: AnimatedOpacity(
+              opacity: _isTapped ? 0.0 : 1.0,
+              duration: Duration(seconds: 1),
+              child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
             ),
           ),
         ),
