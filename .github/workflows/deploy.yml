@@ -21,7 +21,7 @@ jobs:
       - name: Flutterのセットアップ
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.16.0'  # 明示的に最新の安定版を指定
+          flutter-version: '3.27.2'  # 明示的に最新の安定版を指定
           channel: stable
           cache: true
 
