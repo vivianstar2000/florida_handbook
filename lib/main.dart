@@ -50,19 +50,29 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  @override
+    @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: GestureDetector(
-        onTap: _navigateToHomeScreen,
-        child: Scaffold(
-          body: Center(
-            child: AnimatedOpacity(
+    return GestureDetector(
+      onTap: _navigateToHomeScreen,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/handbook表紙.jpg',
+                fit: BoxFit.cover,  // 画面全体にフィット
+              ),
+            ),
+            AnimatedOpacity(
               opacity: _isTapped ? 0.0 : 1.0,
               duration: Duration(seconds: 1),
-              child: Image.asset('assets/handbook表紙.jpg', fit: BoxFit.cover),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.transparent,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
