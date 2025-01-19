@@ -78,11 +78,11 @@ Widget build(BuildContext context) {
             top: 0,
             left: 0,
             right: 0,
-            height: statusBarHeight,  // ステータスバーの高さ分の画像
+            height: statusBarHeight,  // ステータスバー領域をカバー
             child: Image.asset(
               'assets/handbook表紙.jpg',
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.topCenter,  // 画像の上部を表示
             ),
           ),
           AnimatedOpacity(

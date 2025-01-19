@@ -4,17 +4,16 @@ import 'package:flutter/services.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // ステータスバーの色を#f6f2f0に設定
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color(0xFFF6F2F0),  // ステータスバーの色
-      statusBarIconBrightness: Brightness.dark,  // アイコンの色（ダーク）
+      statusBarColor: Color(0xFFF6F2F0),  // ホーム画面のステータスバー色
+      statusBarIconBrightness: Brightness.dark,  // アイコンを黒に
     ));
 
     return Scaffold(
-      backgroundColor: Color(0xFFF6F2F0),  // 背景色をステータスバーと統一
+      backgroundColor: Color(0xFFF6F2F0),
       appBar: AppBar(
         backgroundColor: Color(0xFFF6F2F0),
-        elevation: 0,  // 影を消してフラットにする
+        elevation: 0,
       ),
       body: Center(
         child: Text(
@@ -25,4 +24,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
