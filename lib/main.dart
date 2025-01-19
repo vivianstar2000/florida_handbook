@@ -53,14 +53,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(  // SafeAreaを追加してノッチ部分の対応
+      body: SafeArea(
+        minimum: EdgeInsets.zero,  // ステータスバーの余白を最小化
         child: GestureDetector(
           onTap: _navigateToHomeScreen,
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/handbook表紙.jpg'),
-                fit: BoxFit.cover,  // 画面全体にフィット
+                fit: BoxFit.cover,
               ),
             ),
             width: double.infinity,
