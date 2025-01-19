@@ -25,40 +25,28 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
-    /* iPhoneのステータスバーの白い部分対策 */
     html, body {
       margin: 0;
       padding: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #f6f2f0; /* スプラッシュ画面の色に合わせる */
+      background-color: #000000; /* 画面遷移時の背景色 */
       -webkit-touch-callout: none;
       -webkit-user-select: none;
       touch-action: manipulation;
-      overflow: hidden; /* スクロールの発生を防ぐ */
+      overflow: hidden; /* スクロール防止 */
     }
-
-    /* iPhoneのノッチやステータスバーの余白対策 */
+  
     .app-container {
       position: fixed;
       top: 0;
       left: 0;
-      height: 100vh;
       width: 100vw;
-      padding-top: env(safe-area-inset-top, 0);
-      padding-bottom: env(safe-area-inset-bottom, 0);
-      padding-left: env(safe-area-inset-left, 0);
-      padding-right: env(safe-area-inset-right, 0);
-      box-sizing: border-box;
-      background-color: #ffffff; /* 背景色を白に */
-    }
-
-    /* Safariのズーム制御を無効化 */
-    body {
-      touch-action: pan-x pan-y;
-      overscroll-behavior: none;
+      height: 100vh;
+      background-color: transparent;
     }
   </style>
+  
 </head>
 
 <body>
