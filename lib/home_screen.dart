@@ -9,17 +9,16 @@ import 'pages/family_list.dart';
 
 class HomeScreen extends StatelessWidget {
   final List<Map<String, String>> menuItems = [
-    {'title': '予定表一覧', 'route': '/schedule', 'image': 'assets/schedule.jpg'},
-    {'title': 'プラン詳細', 'route': '/plan', 'image': 'assets/plan.jpg'},
-    {'title': '持ち物', 'route': '/items', 'image': 'assets/items.jpg'},
-    {'title': '注意事項', 'route': '/precautions', 'image': 'assets/notes.jpg'},
-    {'title': '英会話集', 'route': '/english', 'image': 'assets/english.jpg'},
-    {'title': '家族リスト', 'route': '/family', 'image': 'assets/family.jpg'},
+    {'title': 'Overview', 'route': '/schedule', 'image': 'assets/schedule.jpg'},
+    {'title': 'Itinerary', 'route': '/plan', 'image': 'assets/plan.jpg'},
+    {'title': 'Items', 'route': '/items', 'image': 'assets/items.jpg'},
+    {'title': 'Important', 'route': '/precautions', 'image': 'assets/notes.jpg'},
+    {'title': 'English phrasebook', 'route': '/english', 'image': 'assets/english.jpg'},
+    {'title': 'Family list', 'route': '/family', 'image': 'assets/family.jpg'},
   ];
 
   @override
   Widget build(BuildContext context) {
-    // ホーム画面ではステータスバーの色を #f6f2f0 に設定
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Color(0xFFF6F2F0),
       statusBarIconBrightness: Brightness.dark,
@@ -27,64 +26,83 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('home',
-        style: TextStyle(
-      fontFamily: 'Merriweather',  // ここで設定
-      fontSize: 24,           // フォントサイズを調整
-      fontWeight: FontWeight.bold,  // 太字
-      ),),
+        title: Text(
+          'home',
+          style: TextStyle(
+            fontFamily: 'Merriweather',
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFCCA092),
+          ),
+        ),
         backgroundColor: Color(0xFFF6F2F0),
       ),
       backgroundColor: Color(0xFFF6F2F0),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,  // 2列レイアウト
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.0,
-          ),
-          itemCount: menuItems.length,
-          itemBuilder: (context, index) {
-  return Column(
-    children: [
-      Material(
-        elevation: 6,  // 浮いているような影を追加
-        borderRadius: BorderRadius.circular(12),  // 角の丸み
-        child: InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, menuItems[index]['route']!);
-          },
+        child: Column(
+          children: [
+            _buildGridItem(context, menuItems[0], isDoubleWidth: true),  // Overview (2列分)
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(child: _buildGridItem(context, menuItems[1], fixedAspectRatio: 1.5)),
+                const SizedBox(width: 16),
+                Expanded(child: _buildGridItem(context, menuItems[3], fixedAspectRatio: 1.5)),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(child: _buildGridItem(context, menuItems[2], fixedAspectRatio: 1.5)),
+                const SizedBox(width: 16),
+                Expanded(child: _buildGridItem(context, menuItems[4], fixedAspectRatio: 1.5)),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildGridItem(context, menuItems[5], isDoubleWidth: true),  // Family list (2列分)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridItem(BuildContext context, Map<String, String> menuItem, {bool isDoubleWidth = false, double fixedAspectRatio = 1.0}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Material(
+          elevation: 6,
           borderRadius: BorderRadius.circular(12),
-          child: ClipRRect(
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(context, menuItem['route']!);
+            },
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              menuItems[index]['image']!,
-              fit: BoxFit.cover,
-              width: double.infinity,  // 幅いっぱい
-              height: 120,  // 画像の高さ指定
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: AspectRatio(
+                aspectRatio: isDoubleWidth ? 2.5 : fixedAspectRatio, // 比率を統一
+                child: Image.asset(
+                  menuItem['image']!,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
         ),
-      ),
-      const SizedBox(height: 12),  // 画像とテキストの間隔
-      Text(
-        menuItems[index]['title']!,
-        style: TextStyle(
-    fontFamily: 'Roboto',  // ここでフォントを適用
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    color: Colors.black87,
-  ),
-        textAlign: TextAlign.center,
-      ),
-    ],
-  );
-},
-
+        const SizedBox(height: 8),
+        Text(
+          menuItem['title']!,
+          style: TextStyle(
+            fontFamily: 'Merriweather',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
         ),
-      ),
+      ],
     );
   }
 }
