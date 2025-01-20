@@ -33,6 +33,10 @@ class MyApp extends StatelessWidget {
           elevation: 0,  // シャドウなし
           iconTheme: IconThemeData(color: Colors.black),  // アイコンの色
         ),
+        colorScheme: ColorScheme.fromSwatch(
+    primarySwatch: Colors.brown,  // 近い色をベースに
+    accentColor: Color(0xFFD3B2A7),  // アクセントカラーを設定
+  ),
       ),
       initialRoute: '/',
       routes: {
