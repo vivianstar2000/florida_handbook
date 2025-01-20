@@ -76,7 +76,9 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             onTap: () {
-              Navigator.pushNamed(context, menuItem['route']!);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => _getPage(menuItem['route']!)),
+                );
             },
             borderRadius: BorderRadius.circular(12),
             child: ClipRRect(
@@ -105,4 +107,63 @@ class HomeScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _getPage(String routeName) {
+  switch (routeName) {
+    case '/schedule': return ScheduleListPage();
+    case '/plan': return PlanDetailsPage();
+    case '/items': return ItemsPage();
+    case '/precautions': return PrecautionsPage();
+    case '/english': return EnglishConversationPage();
+    case '/family': return FamilyListPage();
+    default: return HomeScreen();
+    }
+    }
+
+
+  Route _createRoute(String routeName) {
+    Widget page;
+
+    switch (routeName) {
+      case '/schedule':
+        page = ScheduleListPage();
+        break;
+      case '/plan':
+        page = PlanDetailsPage();
+        break;
+      case '/items':
+        page = ItemsPage();
+        break;
+      case '/precautions':
+        page = PrecautionsPage();
+        break;
+      case '/english':
+        page = EnglishConversationPage();
+        break;
+      case '/family':
+        page = FamilyListPage();
+        break;
+      default:
+        page = HomeScreen();
+    }
+
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0); // 右から左
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    );
+  }
 }
+
+
