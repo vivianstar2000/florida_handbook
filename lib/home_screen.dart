@@ -7,10 +7,20 @@ import 'pages/precautions.dart';
 import 'pages/english_conversation.dart';
 import 'pages/family_list.dart';
 import '../firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
+
 
 
 
 class HomeScreen extends StatelessWidget {
+  final String roomId;
+  final FirestoreService firestoreService = FirestoreService();
+
+  HomeScreen({Key? key, required this.roomId}) : super(key: key);
+
+
   final List<Map<String, String>> menuItems = [
     {'title': 'Overview', 'route': '/schedule', 'image': 'assets/schedule.jpg'},
     {'title': 'Itinerary', 'route': '/plan', 'image': 'assets/plan.jpg'},
@@ -30,7 +40,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'home',
+          'Home', 
           style: TextStyle(
             fontFamily: 'Merriweather',
             fontSize: 34,
@@ -65,35 +75,37 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
     _buildGridItem(context, menuItems[5], isDoubleWidth: true),
     const SizedBox(height: 32), // 余白追加
+
+     // Firestoreにデータを追加（部屋IDを使用）
     ElevatedButton(
-      onPressed: () async {
-        final firestoreService = FirestoreService();
-        await firestoreService.addUserData('user123', '新しいデータ');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Firestoreにデータを追加しました！")),
-        );
-      },
-      child: Text('Firestoreにデータを追加'),
-    ),
-    const SizedBox(height: 16),
-    ElevatedButton(
-      onPressed: () async {
-        final firestoreService = FirestoreService();
-        var data = await firestoreService.fetchUserData('user123');
-        print("取得データ: $data");
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Firestoreのデータを取得しました！")),
-        );
-      },
-      child: Text('Firestoreのデータを取得'),
-    ),
-  ],
-)
+              onPressed: () async {
+                await firestoreService.addRoomData(roomId, '新しいサンプルデータ');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("データが追加されました！")),
+                );
+              },
+              child: Text('データを追加'),
+            ),
+            const SizedBox(height: 16),
+
+            // Firestoreのデータを取得（部屋IDを使用）
+            ElevatedButton(
+              onPressed: () async {
+                await firestoreService.addRoomData(roomId, '新しいサンプルデータ');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("データが追加されました！")),
+                );
+              },
+              child: Text('データを追加'),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildGridItem(BuildContext context, Map<String, String> menuItem, {bool isDoubleWidth = false, double fixedAspectRatio = 1.0}) {
+  Widget _buildGridItem(BuildContext context, Map<String, String> menuItem, 
+  {bool isDoubleWidth = false, double fixedAspectRatio = 1.0}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -142,7 +154,7 @@ class HomeScreen extends StatelessWidget {
     case '/precautions': return PrecautionsPage();
     case '/english': return EnglishConversationPage();
     case '/family': return FamilyListPage();
-    default: return HomeScreen();
+    default: return HomeScreen(roomId: roomId);  // 修正：roomIdを渡す
     }
     }
 
@@ -170,7 +182,7 @@ class HomeScreen extends StatelessWidget {
         page = FamilyListPage();
         break;
       default:
-        page = HomeScreen();
+        page = HomeScreen(roomId: 'default_room');
     }
 
     return PageRouteBuilder(

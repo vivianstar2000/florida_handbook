@@ -60,32 +60,29 @@ class _SplashScreenState extends State<SplashScreen> {
     _showLoginPopup();
   } else {
     print("ユーザーはすでにログイン済みです。ホーム画面に移動します。");
-    _navigateToHomeScreen();
+    _navigateToHomeScreen('default_room');
   }
 }
 
 
 
   void _showLoginPopup() {
-  print("ログインポップアップ表示中...");
   showDialog(
     context: context,
-    barrierDismissible: false,  // ユーザーがポップアップ外をタップして閉じないようにする
-    builder: (context) => LoginPopup(
-      onLoginSuccess: _navigateToHomeScreen,
-    ),
+    barrierDismissible: false, 
+    builder: (context) => LoginPopup(onLoginSuccess: (roomId) {
+      _navigateToHomeScreen(roomId);
+    }),
   );
 }
 
-
-
-
-  void _navigateToHomeScreen() {
-  Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => HomeScreen()),
-    (Route<dynamic> route) => false,  // すべての以前のルートを削除
-  );
+void _navigateToHomeScreen(String roomId) {
+  Navigator.of(context).pushReplacement(
+  MaterialPageRoute(builder: (context) => HomeScreen(roomId: 'default_room')),
+);
 }
+
+
 
   @override
 Widget build(BuildContext context) {

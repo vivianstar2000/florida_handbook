@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',// 最初にスプラッシュ画面を表示
       routes: {
         '/': (context) => SplashScreen(),  // ここを修正
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(roomId: 'default_room'),
         '/schedule': (context) => ScheduleListPage(),
         '/plan': (context) => PlanDetailsPage(),
         '/items': (context) => ItemsPage(),
@@ -95,14 +95,14 @@ class FirestoreTestPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
-                await _firestoreService.addUserData('user123', 'New Firestore Data');
+                await _firestoreService.addRoomData('default_room', 'New Firestore Data');
               },
               child: Text('Add Data to Firestore'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                var data = await _firestoreService.fetchUserData('user123');
+                var data = await _firestoreService.fetchRoomData('default_room');
                 print('Fetched Data: $data');
               },
               child: Text('Fetch Firestore Data'),

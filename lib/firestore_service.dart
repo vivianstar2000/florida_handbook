@@ -1,25 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> addUserData(String userId, String value) async {
+  Future<void> addRoomData(String roomId, String value) async {
     try {
-      await _firestore.collection('users').doc(userId).collection('data').add({
+      await firestore.collection('rooms').doc(roomId).collection('data').add({
         'sample_field': value,
         'timestamp': FieldValue.serverTimestamp(),
       });
       print("データが追加されました！");
     } catch (e) {
       print("データの追加エラー: $e");
+      throw Exception("Firestoreにデータを追加できませんでした: $e");
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchUserData(String userId) async {
+  Future<List<Map<String, dynamic>>> fetchRoomData(String roomId) async {
     try {
-      var snapshot = await _firestore
-          .collection('users')
-          .doc(userId)
+      var snapshot = await firestore
+          .collection('rooms')
+          .doc(roomId)
           .collection('data')
           .get();
 
@@ -29,4 +30,14 @@ class FirestoreService {
       return [];
     }
   }
+
+  Stream<List<Map<String, dynamic>>> streamRoomData(String roomId) {
+    return firestore
+        .collection('rooms')
+        .doc(roomId)
+        .collection('data')
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+  }
 }
+
