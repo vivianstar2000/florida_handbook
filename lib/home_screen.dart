@@ -6,6 +6,9 @@ import 'pages/items.dart';
 import 'pages/precautions.dart';
 import 'pages/english_conversation.dart';
 import 'pages/family_list.dart';
+import '../firestore_service.dart';
+
+
 
 class HomeScreen extends StatelessWidget {
   final List<Map<String, String>> menuItems = [
@@ -60,9 +63,32 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _buildGridItem(context, menuItems[5], isDoubleWidth: true),  // Family list (2列分)
-          ],
-        ),
+    _buildGridItem(context, menuItems[5], isDoubleWidth: true),
+    const SizedBox(height: 32), // 余白追加
+    ElevatedButton(
+      onPressed: () async {
+        final firestoreService = FirestoreService();
+        await firestoreService.addUserData('user123', '新しいデータ');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Firestoreにデータを追加しました！")),
+        );
+      },
+      child: Text('Firestoreにデータを追加'),
+    ),
+    const SizedBox(height: 16),
+    ElevatedButton(
+      onPressed: () async {
+        final firestoreService = FirestoreService();
+        var data = await firestoreService.fetchUserData('user123');
+        print("取得データ: $data");
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Firestoreのデータを取得しました！")),
+        );
+      },
+      child: Text('Firestoreのデータを取得'),
+    ),
+  ],
+)
       ),
     );
   }
