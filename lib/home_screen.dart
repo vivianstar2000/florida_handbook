@@ -6,8 +6,9 @@ import 'pages/items.dart';
 import 'pages/precautions.dart';
 import 'pages/english_conversation.dart';
 import 'pages/family_list.dart';
-import '../firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:florida_handbook/firestore_service.dart';
+
 
 
 
@@ -74,30 +75,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
     _buildGridItem(context, menuItems[5], isDoubleWidth: true),
-    const SizedBox(height: 32), // 余白追加
-
-     // Firestoreにデータを追加（部屋IDを使用）
-    ElevatedButton(
-              onPressed: () async {
-                await firestoreService.addRoomData(roomId, '新しいサンプルデータ');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("データが追加されました！")),
-                );
-              },
-              child: Text('データを追加'),
-            ),
-            const SizedBox(height: 16),
-
-            // Firestoreのデータを取得（部屋IDを使用）
-            ElevatedButton(
-              onPressed: () async {
-                await firestoreService.addRoomData(roomId, '新しいサンプルデータ');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("データが追加されました！")),
-                );
-              },
-              child: Text('データを追加'),
-            ),
+    const SizedBox(height: 32), // 余白追
           ],
         ),
       ),

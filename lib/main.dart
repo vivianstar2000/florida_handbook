@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'splash_screen.dart';  // ここを確認
@@ -13,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'firestore_service.dart';
+
 
 
 
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',// 最初にスプラッシュ画面を表示
       routes: {
         '/': (context) => SplashScreen(),  // ここを修正
-        '/home': (context) => HomeScreen(roomId: 'default_room'),
+        '/home': (context) => HomeScreen(roomId: 'usa_room'),
         '/schedule': (context) => ScheduleListPage(),
         '/plan': (context) => PlanDetailsPage(),
         '/items': (context) => ItemsPage(),
@@ -95,15 +95,16 @@ class FirestoreTestPage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () async {
-                await _firestoreService.addRoomData('default_room', 'New Firestore Data');
+                await _firestoreService.addRoomData('usa_room', 'New Firestore Data');
+                print("usa_room にデータを追加しました");
               },
               child: Text('Add Data to Firestore'),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                var data = await _firestoreService.fetchRoomData('default_room');
-                print('Fetched Data: $data');
+                var data = await _firestoreService.fetchRoomData('usa_room');
+                print('Fetched Data from usa_room: $data');
               },
               child: Text('Fetch Firestore Data'),
             ),

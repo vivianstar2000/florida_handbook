@@ -1,37 +1,83 @@
+import 'package:florida_handbook/firestore_service.dart';
+
+
 class ToDoFolder {
+  String id;
   String name;
   bool isExpanded;
-  List<ToDoTask> tasks;
+  List<ToDoItem> tasks;
 
-  ToDoFolder(this.name, {this.isExpanded = false, List<ToDoTask>? tasks})
-      : tasks = tasks ?? [];
+  ToDoFolder({
+    required this.id,
+    required this.name,
+    this.isExpanded = false,
+    this.tasks = const [],
+  });
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'isExpanded': isExpanded,
-        'tasks': tasks.map((task) => task.toJson()).toList(),
-      };
+  factory ToDoFolder.fromJson(Map<String, dynamic> json, String documentId) {
+    return ToDoFolder(
+      id: documentId,
+      name: json['name'] ?? 'Untitled',
+      isExpanded: json['isExpanded'] ?? false,
+      tasks: [],
+    );
+  }
 
-  factory ToDoFolder.fromJson(Map<String, dynamic> json) => ToDoFolder(
-        json['name'],
-        isExpanded: json['isExpanded'] ?? false,
-        tasks: (json['tasks'] as List).map((t) => ToDoTask.fromJson(t)).toList(),
-      );
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'isExpanded': isExpanded,
+    };
+  }
 }
 
-class ToDoTask {
+class ToDoItem {
+  String id;
   String title;
   bool isDone;
 
-  ToDoTask(this.title, {this.isDone = false});
+  ToDoItem({
+    required this.id,
+    required this.title,
+    required this.isDone,
+  });
 
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'isDone': isDone,
-      };
+  factory ToDoItem.fromJson(Map<String, dynamic> json, String docId) {
+    return ToDoItem(
+      id: docId,
+      title: json['title'] ?? '',
+      isDone: json['isDone'] ?? false,
+    );
+  }
 
-  factory ToDoTask.fromJson(Map<String, dynamic> json) => ToDoTask(
-        json['title'],
-        isDone: json['isDone'] ?? false,
-      );
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'isDone': isDone,
+    };
+  }
 }
+
+class ToDoTask {
+  String id;
+  String title;
+  bool isDone;
+
+  ToDoTask({required this.id, required this.title, this.isDone = false});
+
+  factory ToDoTask.fromJson(Map<String, dynamic> json, String documentId) {
+    return ToDoTask(
+      id: documentId,
+      title: json['title'] ?? 'Untitled',
+      isDone: json['isDone'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'isDone': isDone,
+    };
+  }
+}
+
