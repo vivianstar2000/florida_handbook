@@ -147,37 +147,35 @@ Future<void> _saveData(ToDoFolder folder, String folderName) async {
       onDismissed: (direction) => _deleteFolder(folder),
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 8.0),
-        child: ExpansionTile(
-          title: Text(
-            folder.name,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            title: Text(
+              folder.name,
+              style: TextStyle(fontSize: 18),
+            ),
+            initiallyExpanded: folder.isExpanded,
+            onExpansionChanged: (expanded) async {
+              if (expanded && folder.tasks.isEmpty) {
+                await _loadToDoItems(folder);
+              }
+              setState(() {
+                folder.isExpanded = expanded;
+              });
+            },
+            children: [
+              if (folder.tasks.isEmpty)
+                ListTile(title: Text('To-Doがありません'))
+              else
+                ...folder.tasks.map((todo) => _buildTaskTile(folder, todo)).toList(),
+            ],
           ),
-          initiallyExpanded: folder.isExpanded,
-          onExpansionChanged: (expanded) async {
-            if (expanded && folder.tasks.isEmpty) {
-              await _loadToDoItems(folder);
-            }
-            setState(() {
-              folder.isExpanded = expanded;
-            });
-          },
-          children: [
-  if (folder.tasks.isEmpty)
-    ListTile(title: Text('To-Doがありません'))
-  else
-    ...folder.tasks.map((todo) => _buildTaskTile(folder, todo)).toList(),
-  ListTile(
-    leading: Icon(Icons.add, color: Colors.blue),
-    title: Text('新しいタスクを追加'),
-    onTap: () => _addToDo(folder),
-  ),
-],
-
         ),
       ),
     ),
   );
 }
+
 
 
 Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
@@ -194,27 +192,39 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
       ),
       onDismissed: (direction) => _deleteToDo(folder, todo), // スワイプで削除
       child: ListTile(
-        leading: Checkbox(
-          value: todo.isDone,
-          onChanged: (value) async {
-  setState(() {
-    todo.isDone = value ?? false;
-  });
+        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0), // 上下の間隔を調整
+        dense: true,  // リストアイテムの高さを圧縮
+        leading: GestureDetector(
+  onTap: () async {
+    setState(() {
+      todo.isDone = !todo.isDone;
+    });
 
-  print("タスク ${todo.title} の新しい状態: ${todo.isDone}");
+    print("タスク ${todo.title} の新しい状態: ${todo.isDone}");
 
-  try {
-    await _firestoreService.updateToDoStatus(
-      widget.roomId, widget.userId, folder.id, todo.id, todo.isDone,
-    );
-    print("Firestoreに保存完了: ${todo.isDone}");
-  } catch (e) {
-    print("Firestore保存エラー: $e");
-  }
-},
+    try {
+      await _firestoreService.updateToDoStatus(
+        widget.roomId, widget.userId, folder.id, todo.id, todo.isDone,
+      );
+      print("Firestoreに保存完了: ${todo.isDone}");
+    } catch (e) {
+      print("Firestore保存エラー: $e");
+    }
+  },
+  child: Container(
+    width: 24,
+    height: 24,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(color: const Color(0xFFD3B2A7), width: 2),
+      color: todo.isDone ? const Color(0xFFD3B2A7) : Colors.white,
+    ),
+    child: todo.isDone
+    ? Icon(Icons.check, color: Colors.white, size: 18, weight: 800)
+    : null,
+  ),
+),
 
-
-        ),
         title: Text(todo.title),
       ),
     ),
@@ -224,24 +234,30 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Vivian')),
-      body: folders.isEmpty
-          ? Center(child: Text("フォルダーがありません"))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: folders.length,
-              itemBuilder: (context, index) {
-                return _buildFolderTile(folders[index]);
-              },
-            ),
-      floatingActionButton: FloatingActionButton(
+  return Scaffold(
+    appBar: AppBar(title: Text('Vivian')),
+    body: folders.isEmpty
+        ? Center(child: Text("フォルダーがありません"))
+        : ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: folders.length,
+            itemBuilder: (context, index) {
+              return _buildFolderTile(folders[index]);
+            },
+          ),
+    floatingActionButton: Transform.translate(
+      offset: Offset(0, -40),  // Y軸方向に40px上へ移動
+      child: FloatingActionButton(
         onPressed: _addFolder,
         backgroundColor: Color(0xFFE5D1CA),
+        shape: CircleBorder(),  // 丸い形にする
         child: Icon(Icons.add, color: Colors.white),
       ),
-    );
-  }
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+  );
+}
+
 
   void _editFolder(ToDoFolder folder) {
   TextEditingController folderController = TextEditingController(text: folder.name);
