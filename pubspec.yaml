@@ -55,6 +55,16 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
+  flutter_launcher_icons: ^0.13.1
+
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon.jpg"  # アイコン画像のパス
+  adaptive_icon_background: "#f6f2f0"  # Androidの適応アイコン用背景色（必要に応じて変更）
+  adaptive_icon_foreground: "assets/app_icon.jpg"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
