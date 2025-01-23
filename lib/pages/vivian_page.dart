@@ -151,9 +151,14 @@ Future<void> _saveData(ToDoFolder folder, String folderName) async {
           data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
           child: ExpansionTile(
             title: Text(
-              folder.name,
-              style: TextStyle(fontSize: 18),
-            ),
+  folder.name,
+  style: TextStyle(
+    fontFamily: 'NotoSansJP',  // 追加
+    fontSize: 18,
+    fontWeight: FontWeight.w600,  // SemiBold相当
+    color: Color(0xFFa0928d),    // 色を変更したい場合
+  ),  // 閉じ括弧の修正
+),
             initiallyExpanded: folder.isExpanded,
             onExpansionChanged: (expanded) async {
               if (expanded && folder.tasks.isEmpty) {
@@ -226,7 +231,16 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
   ),
 ),
 
-        title: Text(todo.title),
+        title: Text(
+  todo.title,
+  style: TextStyle(
+    fontFamily: 'NotoSansJP',  // 使用したいフォント名に変更
+    fontSize: 14,              // フォントサイズを調整
+    fontWeight: FontWeight.w500, // Medium相当
+    color: Color(0xFF6d615b),  // 任意のカラー
+  ),
+),
+
       ),
     ),
   );

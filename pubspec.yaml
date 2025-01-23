@@ -126,6 +126,15 @@ flutter:
         - asset: assets/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf
         - asset: assets/fonts/Roboto-VariableFont_wdth,wght.ttf
           weight: 700
+    - family: NotoSansJP
+      fonts:
+        - asset: assets/fonts/NotoSansJP-VariableFont_wght.ttf
+        - asset: assets/fonts/NotoSansJP-Black.ttf
+        - asset: assets/fonts/NotoSansJP-Bold.ttf
+        - asset: assets/fonts/NotoSansJP-ExtraBold.ttf
+        - asset: assets/fonts/NotoSansJP-Medium.ttf
+        - asset: assets/fonts/NotoSansJP-Regular.ttf
+        - asset: assets/fonts/NotoSansJP-SemiBold.ttf
 
 
 

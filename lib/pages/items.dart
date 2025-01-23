@@ -54,11 +54,9 @@ Widget _buildNavigationButton(BuildContext context, String name, Widget page) {
         boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8)],
       ),
       child: Center(
-        child: Text(name, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+        child: Text(name, style: TextStyle(fontFamily: 'Merriweather',fontSize: 30, fontWeight: FontWeight.bold)),
       ),
     ),
   );
 }
-
-
 }
