@@ -192,8 +192,9 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
       ),
       onDismissed: (direction) => _deleteToDo(folder, todo), // スワイプで削除
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0), // 上下の間隔を調整
+        contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: -4), // 上下の間隔を調整
         dense: true,  // リストアイテムの高さを圧縮
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4), // アイテムの間隔をさらに圧縮
         leading: GestureDetector(
   onTap: () async {
     setState(() {
@@ -235,7 +236,12 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text('Vivian')),
+    appBar: AppBar(title: Text('Vivian',style: TextStyle(
+            fontFamily: 'Merriweather',
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFCCA092),
+          ),)),
     body: folders.isEmpty
         ? Center(child: Text("フォルダーがありません"))
         : ListView.builder(

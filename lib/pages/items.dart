@@ -19,7 +19,12 @@ class _ItemsPageState extends State<ItemsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Items')),
+      appBar: AppBar(title: Text('Items',style: TextStyle(
+            fontFamily: 'Merriweather',
+            fontSize: 34,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFCCA092),
+          ),)),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
