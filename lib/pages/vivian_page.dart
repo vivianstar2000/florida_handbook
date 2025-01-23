@@ -245,18 +245,20 @@ Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
               return _buildFolderTile(folders[index]);
             },
           ),
-    floatingActionButton: Transform.translate(
-      offset: Offset(0, -40),  // Y軸方向に40px上へ移動
-      child: FloatingActionButton(
-        onPressed: _addFolder,
-        backgroundColor: Color(0xFFE5D1CA),
-        shape: CircleBorder(),  // 丸い形にする
-        child: Icon(Icons.add, color: Colors.white),
-      ),
-    ),
+    floatingActionButton: Container(
+  margin: EdgeInsets.only(bottom: 40),  // 下方向に40px移動
+  child: FloatingActionButton(
+    onPressed: _addFolder,
+    backgroundColor: Color(0xFFE5D1CA),
+    shape: CircleBorder(),
+    child: Icon(Icons.add, color: Colors.white),
+  ),
+),
+
     floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
   );
 }
+
 
 
   void _editFolder(ToDoFolder folder) {
