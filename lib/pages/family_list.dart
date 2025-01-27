@@ -132,7 +132,7 @@ class FamilyListPage extends StatelessWidget {
       'birthday': '？',
       'age': '？',
       'other': '愛犬、元消防のレスキュー犬、頭がいい',
-      'personality': '人懐こい、舐める、走る',
+      'personality': '人懐こい、舐める、走る、ハグ',
     },
   ];
 
