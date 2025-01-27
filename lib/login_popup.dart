@@ -12,8 +12,17 @@ class LoginPopup extends StatefulWidget {
 
 class _LoginPopupState extends State<LoginPopup> {
   final TextEditingController _roomIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final String correctPassword = "0615";  // 設定されたパスワード
 
   Future<void> _loginAnonymously() async {
+    if (_passwordController.text.trim() != correctPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("パスワードが正しくありません")),
+      );
+      return;
+    }
+
     try {
       await FirebaseAuth.instance.signInAnonymously();
       String roomId = _roomIdController.text.trim();
@@ -44,6 +53,12 @@ class _LoginPopupState extends State<LoginPopup> {
           TextField(
             controller: _roomIdController,
             decoration: InputDecoration(labelText: "部屋ID"),
+          ),
+          SizedBox(height: 16),
+          TextField(
+            controller: _passwordController,
+            obscureText: true,  // パスワードの非表示化
+            decoration: InputDecoration(labelText: "パスワード"),
           ),
           SizedBox(height: 16),
           ElevatedButton(

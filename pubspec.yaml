@@ -115,8 +115,25 @@ flutter:
     - assets/notes.jpg
     - assets/english.jpg
     - assets/family.jpg
+    - assets/app_icon.jpg
+    - assets/dennis.jpeg
+    - assets/grandma.jpeg
+    - assets/grandpa.jpeg
+    - assets/melinda.jpeg
+    - assets/marissa.jpeg
+    - assets/anthony.jpeg
+    - assets/makayla.jpeg
+    - assets/ava.jpeg
+    - assets/alena.jpeg
+    - assets/ayden.jpeg
+    - assets/alex.jpeg
+    - assets/captain.jpg
+
+
     
 
+    
+    
   fonts:
     - family: Merriweather
       fonts:
