@@ -2,27 +2,32 @@ import 'package:florida_handbook/firestore_service.dart';
 
 
 class ToDoFolder {
-  String id;
-  String name;
-  bool isExpanded;
-  List<ToDoItem> tasks;
+  String id; // フォルダーのID
+  String name; // フォルダーの名前
+  bool isExpanded; // 展開状態
+  List<ToDoFolder> subfolders; // サブフォルダーのリスト
+  List<ToDoItem> tasks; // タスクリスト
 
   ToDoFolder({
     required this.id,
     required this.name,
     this.isExpanded = false,
-    this.tasks = const [],
+    this.subfolders = const [], // 初期値は空のリスト
+    this.tasks = const [], // 初期値は空のリスト
   });
 
+  // Firestoreのデータから`ToDoFolder`インスタンスを生成
   factory ToDoFolder.fromJson(Map<String, dynamic> json, String documentId) {
     return ToDoFolder(
       id: documentId,
       name: json['name'] ?? 'Untitled',
       isExpanded: json['isExpanded'] ?? false,
-      tasks: [],
+      subfolders: [], // サブフォルダーは別途取得する
+      tasks: [], // タスクは別途取得する
     );
   }
 
+  // インスタンスをFirestoreに保存するためのMap形式に変換
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -31,10 +36,11 @@ class ToDoFolder {
   }
 }
 
+
 class ToDoItem {
-  String id;
-  String title;
-  bool isDone;
+  String id; // タスクのID
+  String title; // タスク名
+  bool isDone; // 完了状態
 
   ToDoItem({
     required this.id,
@@ -42,6 +48,8 @@ class ToDoItem {
     required this.isDone,
   });
 
+
+  // Firestoreのデータから`ToDoItem`インスタンスを生成
   factory ToDoItem.fromJson(Map<String, dynamic> json, String docId) {
     return ToDoItem(
       id: docId,
@@ -50,6 +58,7 @@ class ToDoItem {
     );
   }
 
+ // インスタンスをFirestoreに保存するためのMap形式に変換
   Map<String, dynamic> toJson() {
     return {
       'title': title,
