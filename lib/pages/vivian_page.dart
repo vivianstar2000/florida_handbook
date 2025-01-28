@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:florida_handbook/firestore_service.dart';
 import 'package:florida_handbook/models/todo_models.dart';
-import 'package:florida_handbook/pages/task_list_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VivianPage extends StatefulWidget {
@@ -19,73 +18,114 @@ class VivianPage extends StatefulWidget {
 }
 
 class _VivianPageState extends State<VivianPage> {
-  List<ToDoFolder> folders = [];
   final FirestoreService _firestoreService = FirestoreService();
+  final List<String> sections = ['リュック', '機内持ち込み手荷物', 'スーツケース', 'その他'];
+  Map<String, List<ToDoFolder>> folders = {};
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    for (var section in sections) {
+      folders[section] = []; // セクションごとに空リストを初期化
+    }
+    initializeSections();
   }
 
-  void _addFolder({ToDoFolder? parentFolder}) {
-    TextEditingController folderController = TextEditingController();
+  // VivianPage.dart
+Future<void> initializeSections() async {
+  try {
+    Map<String, List<ToDoFolder>> allFolders = {};
+    for (var section in sections) {
+      var sectionFolders = await _firestoreService.fetchFoldersWithTasks(
+        widget.roomId,
+        widget.userId,
+        section,
+      );
+
+      // フォルダが空の場合はデフォルトフォルダを追加
+      if (sectionFolders.isEmpty) {
+        await _firestoreService.addFolder(
+          widget.roomId,
+          widget.userId,
+          section,
+          {'name': 'Default Folder', 'isExpanded': false},
+        );
+        sectionFolders = await _firestoreService.fetchFoldersWithTasks(
+          widget.roomId,
+          widget.userId,
+          section,
+        );
+      }
+
+      allFolders[section] = sectionFolders;
+    }
+
+    if (mounted) {
+      setState(() {
+        folders = allFolders;
+      });
+    }
+  } catch (e) {
+    print("データの初期化エラー: $e");
+  }
+}
+
+
+
+  Future<void> _loadData(String sectionName) async {
+  try {
+    // フォルダを取得
+    var cloudFolders = await _firestoreService.fetchFoldersWithTasks(
+      widget.roomId,
+      widget.userId,
+      sectionName,
+    );
+
+    // UIに反映
+    if (mounted) {
+      setState(() {
+        folders[sectionName] = cloudFolders;
+      });
+    }
+  } catch (e) {
+    print("データ取得エラー: $e");
+    if (mounted) {
+      setState(() {
+        folders[sectionName] = [];
+      });
+    }
+  }
+}
+
+
+
+  Future<void> _addTask(String sectionName, String folderId) async {
+    TextEditingController taskController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
-        title: Text(parentFolder == null ? '新しいフォルダー' : '新しいサブフォルダー'),
+        title: Text('新しいタスク'),
         content: TextField(
-          controller: folderController,
-          decoration: InputDecoration(hintText: 'フォルダー名'),
+          controller: taskController,
+          decoration: InputDecoration(hintText: 'タスク名'),
         ),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context), child: Text('キャンセル')),
           TextButton(
             onPressed: () async {
-              if (folderController.text.trim().isEmpty) return;
-
-              var newFolder = ToDoFolder(
-                id: '',
-                name: folderController.text.trim(),
-                isExpanded: false,
-                tasks: [],
-                subfolders: [],
+              if (taskController.text.trim().isEmpty) return;
+              await _firestoreService.addTask(
+                widget.roomId,
+                widget.userId,
+                sectionName,
+                folderId,
+                {'title': taskController.text.trim(), 'isDone': false},
               );
-
-              if (parentFolder == null) {
-                // Top-level folder
-                DocumentReference docRef = await _firestoreService.addFolder(
-                  widget.roomId,
-                  widget.userId,
-                  {
-                    'name': folderController.text.trim(),
-                    'isExpanded': false,
-                  },
-                );
-                setState(() {
-                  newFolder.id = docRef.id;
-                  folders.add(newFolder);
-                });
-              } else {
-                // Subfolder
-                DocumentReference docRef = await _firestoreService.addSubFolder(
-                  widget.roomId,
-                  widget.userId,
-                  parentFolder.id,
-                  {
-                    'name': folderController.text.trim(),
-                    'isExpanded': false,
-                  },
-                );
-                setState(() {
-                  newFolder.id = docRef.id;
-                  parentFolder.subfolders.add(newFolder);
-                });
-              }
-
               Navigator.pop(context);
+              await _loadData(sectionName); // 再取得
+setState(() {}); // 明示的にUIを再描画
             },
             child: Text('追加'),
           ),
@@ -94,256 +134,7 @@ class _VivianPageState extends State<VivianPage> {
     );
   }
 
-  Future<void> _loadData() async {
-    try {
-      var cloudFolders = await _firestoreService.fetchFolders(widget.roomId, widget.userId);
-
-      for (var folder in cloudFolders) {
-        folder.tasks = await _firestoreService.fetchToDoItems(widget.roomId, widget.userId, folder.id);
-        folder.subfolders = await _firestoreService.fetchSubFolders(widget.roomId, widget.userId, folder.id);
-      }
-
-      if (mounted) {
-        setState(() {
-          folders = cloudFolders;
-        });
-      }
-    } catch (e) {
-      print("データ取得エラー: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("データの読み込みに失敗しました")),
-      );
-    }
-  }
-
-  Future<void> _loadSubFolderData(ToDoFolder folder) async {
-    try {
-      folder.subfolders = await _firestoreService.fetchSubFolders(widget.roomId, widget.userId, folder.id);
-      if (mounted) {
-        setState(() {});
-      }
-    } catch (e) {
-      print("サブフォルダー取得エラー: $e");
-    }
-  }
-
-  void _addToDo(ToDoFolder folder) {
-  TextEditingController taskController = TextEditingController();
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      backgroundColor: Colors.white,
-      title: Text('新しいタスクを追加'),
-      content: TextField(
-        controller: taskController,
-        decoration: InputDecoration(hintText: 'タスク名を入力してください'),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('キャンセル'),
-        ),
-        TextButton(
-          onPressed: () async {
-            if (taskController.text.trim().isEmpty) return;
-
-            // Firestoreにタスクを追加
-            var newTask = ToDoItem(
-              id: '', // Firestoreで自動生成されるID
-              title: taskController.text.trim(),
-              isDone: false,
-            );
-
-            DocumentReference taskRef = await _firestoreService.addTask(
-              widget.roomId,
-              widget.userId,
-              folder.id,
-              newTask.toJson(),
-            );
-
-            // ローカルデータにタスクを追加して画面を更新
-            setState(() {
-              folder.tasks.add(ToDoItem(
-                id: taskRef.id,
-                title: taskController.text.trim(),
-                isDone: false,
-              ));
-            });
-
-            Navigator.pop(context); // ダイアログを閉じる
-          },
-          child: Text('追加'),
-        ),
-      ],
-    ),
-  );
-}
-
-
-
-
-  Widget _buildFolderTile(ToDoFolder folder) {
-    return GestureDetector(
-      onLongPress: () => _editFolder(folder),
-      child: Dismissible(
-        key: Key(folder.id),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: Colors.red,
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Icon(Icons.delete, color: Colors.white),
-        ),
-        onDismissed: (direction) => _deleteFolder(folder),
-        child: Card(
-          margin: EdgeInsets.symmetric(vertical: 8.0),
-          child: Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ExpansionTile(
-              title: Text(
-                folder.name,
-                style: TextStyle(
-                  fontFamily: 'NotoSansJP',
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFFa0928d),
-                ),
-              ),
-              initiallyExpanded: folder.isExpanded,
-              onExpansionChanged: (expanded) async {
-                if (expanded && folder.subfolders.isEmpty) {
-                  await _loadSubFolderData(folder);
-                }
-                setState(() {
-                  folder.isExpanded = expanded;
-                });
-              },
-              children: [
-                // Subfolders
-                ...folder.subfolders.map((subfolder) => _buildFolderTile(subfolder)).toList(),
-                // Tasks
-                if (folder.tasks.isEmpty)
-                  ListTile(title: Text('To-Doがありません'))
-                else
-                  ...folder.tasks.map((todo) => _buildTaskTile(folder, todo)).toList(),
-                // サブフォルダー追加ボタン
-                ListTile(
-                leading: Icon(Icons.create_new_folder, color: Colors.blue),
-                title: Text(
-                  'Add Subfolder',
-                  style: TextStyle(fontFamily: 'NotoSansJP', fontSize: 16,),
-                ),
-                onTap: () => _addFolder(parentFolder: folder),
-              ),
-                // タスク追加ボタン
-              ListTile(
-                leading: Icon(Icons.add_circle_outline, color: Colors.green),
-                title: Text(
-                  'Add Task',
-                  style: TextStyle(fontFamily: 'NotoSansJP', fontSize: 16),
-                ),
-                onTap: () => _addToDo(folder),
-              ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTaskTile(ToDoFolder folder, ToDoItem todo) {
-    return GestureDetector(
-      onLongPress: () => _editToDo(folder, todo),
-      child: Dismissible(
-        key: Key(todo.id),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: Colors.red,
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Icon(Icons.delete, color: Colors.white),
-        ),
-        onDismissed: (direction) => _deleteToDo(folder, todo),
-        child: ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: -4),
-          dense: true,
-          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-          leading: GestureDetector(
-            onTap: () async {
-              setState(() {
-                todo.isDone = !todo.isDone;
-              });
-              try {
-                await _firestoreService.updateToDoStatus(
-                  widget.roomId, widget.userId, folder.id, todo.id, todo.isDone,
-                );
-              } catch (e) {
-                print("Firestore保存エラー: $e");
-              }
-            },
-            child: Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFD3B2A7), width: 2),
-                color: todo.isDone ? const Color(0xFFD3B2A7) : Colors.white,
-              ),
-              child: todo.isDone ? Icon(Icons.check, color: Colors.white, size: 18) : null,
-            ),
-          ),
-          title: Text(
-            todo.title,
-            style: TextStyle(
-              fontFamily: 'NotoSansJP',
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF6d615b),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Vivian',
-          style: TextStyle(
-            fontFamily: 'Merriweather',
-            fontSize: 34,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFCCA092),
-          ),
-        ),
-      ),
-      body: folders.isEmpty
-          ? Center(child: Text("フォルダーがありません"))
-          : ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: folders.length,
-              itemBuilder: (context, index) {
-                return _buildFolderTile(folders[index]);
-              },
-            ),
-      floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: 40),
-        child: FloatingActionButton(
-          onPressed: () => _addFolder(),
-          backgroundColor: Color(0xFFE5D1CA),
-          shape: CircleBorder(),
-          child: Icon(Icons.add, color: Colors.white),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-
-  void _editFolder(ToDoFolder folder) {
+  Future<void> _editFolder(String sectionName, ToDoFolder folder) async {
     TextEditingController folderController = TextEditingController(text: folder.name);
     showDialog(
       context: context,
@@ -355,17 +146,20 @@ class _VivianPageState extends State<VivianPage> {
           decoration: InputDecoration(hintText: 'フォルダー名'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('キャンセル')),
+          TextButton(
+              onPressed: () => Navigator.pop(context), child: Text('キャンセル')),
           TextButton(
             onPressed: () async {
               if (folderController.text.trim().isEmpty) return;
               await _firestoreService.updateFolderName(
-                widget.roomId, widget.userId, folder.id, folderController.text.trim(),
+                widget.roomId,
+                widget.userId,
+                sectionName,
+                folder.id,
+                folderController.text.trim(),
               );
-              setState(() {
-                folder.name = folderController.text.trim();
-              });
               Navigator.pop(context);
+              await _loadData(sectionName); // 再描画のため再ロード
             },
             child: Text('保存'),
           ),
@@ -374,62 +168,293 @@ class _VivianPageState extends State<VivianPage> {
     );
   }
 
-  void _deleteFolder(ToDoFolder folder) async {
+  Future<void> _deleteFolderWithTasks(String sectionName, ToDoFolder folder) async {
     bool confirmDelete = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text('フォルダー削除'),
         content: Text('本当に削除しますか？'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text('キャンセル')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: Text('削除')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false), child: Text('キャンセル')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, true), child: Text('削除')),
         ],
       ),
     );
 
     if (confirmDelete == true) {
-      await _firestoreService.deleteFolder(widget.roomId, widget.userId, folder.id);
-      setState(() {
-        folders.remove(folder);
-      });
+      await _firestoreService.deleteFolderWithTasks(widget.roomId, widget.userId, sectionName, folder.id);
+      await _loadData(sectionName); // 再描画のため再ロード
     }
   }
 
-  void _editToDo(ToDoFolder folder, ToDoItem todo) {
-    TextEditingController taskController = TextEditingController(text: todo.title);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        title: Text('タスクの編集'),
-        content: TextField(
-          controller: taskController,
-          decoration: InputDecoration(hintText: 'タスク名'),
+  
+
+  Widget _buildFolderTile(String sectionName, ToDoFolder folder) {
+  return Card(
+    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0), // フォルダ間の余白を調整
+    child: Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        title: Text(
+          folder.name,
+          style: TextStyle(
+            fontFamily: 'NotoSansJP',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFFa0928d),
+          ),
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text('キャンセル')),
-          TextButton(
-            onPressed: () async {
-              if (taskController.text.trim().isEmpty) return;
-              await _firestoreService.updateTask(
-                widget.roomId, widget.userId, folder.id, todo.id, taskController.text.trim(),
+        children: [
+          ...folder.tasks.map((task) {
+            return Dismissible(
+              key: Key(task.id),
+              direction: DismissDirection.endToStart,
+              onDismissed: (direction) async {
+                await _firestoreService.deleteTask(
+                  widget.roomId,
+                  widget.userId,
+                  sectionName,
+                  folder.id,
+                  task.id,
+                );
+                await _loadData(sectionName); // 再描画のため再取得
+              },
+              background: Container(
+                color: Colors.red,
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 16.0),
+                child: Icon(Icons.delete, color: Colors.white),
+              ),
+              child: GestureDetector(
+                onLongPress: () => _editTask(sectionName, folder.id, task),
+                child: Padding(
+  padding: EdgeInsets.symmetric(vertical: 2.0), // タスク全体の上下マージンを最小限に
+  child: Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Padding(
+        padding: EdgeInsets.only(left: 20.0), // 左端からの位置を調整
+        child: Transform.scale(
+          scale: 1.0, // チェックボックスのサイズを小さく
+          child: Checkbox(
+            shape: CircleBorder(),
+            value: task.isDone,
+            onChanged: (bool? value) async {
+              await _firestoreService.updateToDoStatus(
+                widget.roomId,
+                widget.userId,
+                sectionName,
+                folder.id,
+                task.id,
+                value ?? false,
               );
-              setState(() {
-                todo.title = taskController.text.trim();
-              });
-              Navigator.pop(context);
+              await _loadData(sectionName); // 再取得
             },
-            child: Text('保存'),
+            fillColor: MaterialStateProperty.resolveWith<Color>(
+              (states) {
+                if (states.contains(MaterialState.selected)) {
+                  return Color(0xFFD3B2A7); // チェック時の色
+                }
+                return Colors.transparent; // 非チェック時
+              },
+            ),
+            side: MaterialStateBorderSide.resolveWith(
+              (states) {
+                if (!states.contains(MaterialState.selected)) {
+                  return BorderSide(color: Color(0xFFE5D1CA), width: 2); // 非チェック時枠線
+                }
+                return BorderSide.none; // チェック時枠線なし
+              },
+            ),
+          ),
+        ),
+      ),
+      SizedBox(width: 8.0), // チェックボックスとテキストの間隔を調整
+      Expanded(
+        child: Text(
+          task.title,
+          style: TextStyle(
+            fontFamily: 'NotoSansJP',
+            fontSize: 14, // タスク文字サイズ
+            color: Color(0xFF544740),
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
+              ),
+            );
+          }).toList(),
+          ListTile(
+            leading: Icon(Icons.add, color: Color(0xFFE5D1CA)),
+            title: Text('タスクを追加'),
+            onTap: () => _addTask(sectionName, folder.id),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  void _deleteToDo(ToDoFolder folder, ToDoItem todo) async {
-    await _firestoreService.deleteTask(widget.roomId, widget.userId, folder.id, todo.id);
-    setState(() {
-      folder.tasks.remove(todo);
-    });
-  }
+
+
+// VivianPage.dart
+Future<void> _editTask(String sectionName, String folderId, ToDoItem task) async {
+  TextEditingController taskController = TextEditingController(text: task.title);
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: Colors.white,
+      title: Text('タスクを編集'),
+      content: TextField(
+        controller: taskController,
+        decoration: InputDecoration(hintText: 'タスク名'),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('キャンセル'),
+        ),
+        TextButton(
+          onPressed: () async {
+            if (taskController.text.trim().isEmpty) return;
+            await _firestoreService.updateTask(
+              widget.roomId,
+              widget.userId,
+              sectionName,
+              folderId,
+              task.id,
+              {
+                'title': taskController.text.trim(),
+                'isDone': task.isDone,
+              },
+            );
+            Navigator.pop(context);
+            await _loadData(sectionName); // 再描画
+          },
+          child: Text('保存'),
+        ),
+      ],
+    ),
+  );
+}
+
+
+  @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(
+        'Vivian',
+        style: TextStyle(
+          fontFamily: 'Merriweather',
+          fontSize: 34,
+          fontWeight: FontWeight.bold,
+          color: Color(0xFFCCA092),
+        ),
+      ),
+    ),
+    body: folders.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        : ListView.builder(
+            itemCount: sections.length,
+            itemBuilder: (context, index) {
+              final sectionName = sections[index];
+              return folders[sectionName]!.isEmpty
+                  ? SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                sectionName,
+                                style: TextStyle(
+                                  fontFamily: 'NotoSansJP',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF6d615b),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              IconButton(
+                                icon: Icon(Icons.add, color: Color(0xFFCCA092)),
+                                onPressed: () async {
+                                  TextEditingController folderController =
+                                      TextEditingController();
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('新しいフォルダー'),
+                                      content: TextField(
+                                        controller: folderController,
+                                        decoration: InputDecoration(
+                                            hintText: 'フォルダー名'),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text('キャンセル')),
+                                        TextButton(
+                                          onPressed: () async {
+                                            if (folderController.text
+                                                .trim()
+                                                .isEmpty) return;
+                                            await _firestoreService.addFolder(
+                                              widget.roomId,
+                                              widget.userId,
+                                              sectionName,
+                                              {
+                                                'name': folderController.text
+                                                    .trim(),
+                                                'isExpanded': false,
+                                              },
+                                            );
+                                            Navigator.pop(context);
+                                            await _loadData(sectionName);
+                                          },
+                                          child: Text('追加'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        ...folders[sectionName]!.map(
+                          (folder) => Dismissible(
+                            key: Key(folder.id),
+                            direction: DismissDirection.endToStart,
+                            onDismissed: (direction) async {
+                              await _deleteFolderWithTasks(sectionName, folder);
+                            },
+                            background: Container(
+                              color: Colors.red,
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.only(right: 16.0),
+                              child: Icon(Icons.delete, color: Colors.white),
+                            ),
+                            child: GestureDetector(
+                              onLongPress: () =>
+                                  _editFolder(sectionName, folder),
+                              child: _buildFolderTile(sectionName, folder),
+                            ),
+                          ),
+                        ).toList(),
+                      ],
+                    );
+            },
+          ),
+  );
+}
+
 }

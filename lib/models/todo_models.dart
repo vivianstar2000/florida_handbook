@@ -2,32 +2,29 @@ import 'package:florida_handbook/firestore_service.dart';
 
 
 class ToDoFolder {
-  String id; // フォルダーのID
-  String name; // フォルダーの名前
-  bool isExpanded; // 展開状態
-  List<ToDoFolder> subfolders; // サブフォルダーのリスト
-  List<ToDoItem> tasks; // タスクリスト
+  String id;
+  String name;
+  bool isExpanded;
+  List<ToDoItem> tasks;
 
   ToDoFolder({
     required this.id,
     required this.name,
     this.isExpanded = false,
-    this.subfolders = const [], // 初期値は空のリスト
-    this.tasks = const [], // 初期値は空のリスト
+    this.tasks = const [],
   });
 
-  // Firestoreのデータから`ToDoFolder`インスタンスを生成
+  // Firestoreからデータを取得する際のFactory
   factory ToDoFolder.fromJson(Map<String, dynamic> json, String documentId) {
     return ToDoFolder(
       id: documentId,
-      name: json['name'] ?? 'Untitled',
+      name: json['name'] ?? 'Untitled', // デフォルト値を設定
       isExpanded: json['isExpanded'] ?? false,
-      subfolders: [], // サブフォルダーは別途取得する
-      tasks: [], // タスクは別途取得する
+      tasks: [], // タスクは後で追加される
     );
   }
 
-  // インスタンスをFirestoreに保存するためのMap形式に変換
+  // Firestoreにデータを保存する際のメソッド
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -36,11 +33,10 @@ class ToDoFolder {
   }
 }
 
-
 class ToDoItem {
-  String id; // タスクのID
-  String title; // タスク名
-  bool isDone; // 完了状態
+  String id;
+  String title;
+  bool isDone;
 
   ToDoItem({
     required this.id,
@@ -48,40 +44,16 @@ class ToDoItem {
     required this.isDone,
   });
 
-
-  // Firestoreのデータから`ToDoItem`インスタンスを生成
-  factory ToDoItem.fromJson(Map<String, dynamic> json, String docId) {
+  // Firestoreからデータを取得する際のFactory
+  factory ToDoItem.fromJson(Map<String, dynamic> json, String documentId) {
     return ToDoItem(
-      id: docId,
-      title: json['title'] ?? '',
-      isDone: json['isDone'] ?? false,
-    );
-  }
-
- // インスタンスをFirestoreに保存するためのMap形式に変換
-  Map<String, dynamic> toJson() {
-    return {
-      'title': title,
-      'isDone': isDone,
-    };
-  }
-}
-
-class ToDoTask {
-  String id;
-  String title;
-  bool isDone;
-
-  ToDoTask({required this.id, required this.title, this.isDone = false});
-
-  factory ToDoTask.fromJson(Map<String, dynamic> json, String documentId) {
-    return ToDoTask(
       id: documentId,
-      title: json['title'] ?? 'Untitled',
+      title: json['title'] ?? 'Untitled Task', // デフォルト値を設定
       isDone: json['isDone'] ?? false,
     );
   }
 
+  // Firestoreにデータを保存する際のメソッド
   Map<String, dynamic> toJson() {
     return {
       'title': title,

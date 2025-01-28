@@ -21,7 +21,8 @@ class FirestoreService {
   // 部屋データの取得
   Future<Map<String, dynamic>?> fetchRoomData(String roomId) async {
     try {
-      var documentSnapshot = await _firestore.collection('rooms').doc(roomId).get();
+      var documentSnapshot =
+          await _firestore.collection('rooms').doc(roomId).get();
       if (!documentSnapshot.exists || documentSnapshot.data() == null) {
         print("データが見つかりませんでした");
         return null;
@@ -34,165 +35,151 @@ class FirestoreService {
   }
 
   // フォルダの取得
-  Future<List<ToDoFolder>> fetchFolders(String roomId, String userId) async {
-    var snapshot = await _firestore
+  Future<List<ToDoFolder>> fetchFoldersWithTasks(
+    String roomId, String userId, String sectionName) async {
+  // フォルダとタスクを同時に取得
+  var folderSnapshot = await _firestore
+      .collection('rooms')
+      .doc(roomId)
+      .collection('ItemsPage')
+      .doc(userId)
+      .collection(sectionName)
+      .get();
+
+  List<ToDoFolder> folders = [];
+
+  for (var folderDoc in folderSnapshot.docs) {
+    var folderData = folderDoc.data();
+    var folder = ToDoFolder(
+      id: folderDoc.id,
+      name: folderData['name'] ?? 'Untitled',
+      isExpanded: folderData['isExpanded'] ?? false,
+      tasks: [],
+    );
+
+    // フォルダ内のタスクを取得
+    var taskSnapshot = await _firestore
         .collection('rooms')
         .doc(roomId)
         .collection('ItemsPage')
         .doc(userId)
-        .collection('folders')
-        .get();
-
-    return snapshot.docs.map((doc) {
-      return ToDoFolder.fromJson(doc.data(), doc.id);
-    }).toList();
-  }
-
-  // サブフォルダーの取得
-  Future<List<ToDoFolder>> fetchSubFolders(String roomId, String userId, String parentFolderId) async {
-    var snapshot = await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(parentFolderId)
-        .collection('subfolders')
-        .get();
-
-    return snapshot.docs.map((doc) {
-      return ToDoFolder.fromJson(doc.data(), doc.id);
-    }).toList();
-  }
-
-  // フォルダの追加
-  Future<DocumentReference> addFolder(String roomId, String userId, Map<String, dynamic> folderData) async {
-    return await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .add(folderData);
-  }
-
-  // サブフォルダーの追加
-  Future<DocumentReference> addSubFolder(String roomId, String userId, String parentFolderId, Map<String, dynamic> subFolderData) async {
-    return await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(parentFolderId)
-        .collection('subfolders')
-        .add(subFolderData);
-  }
-
-  // フォルダ名の更新
-  Future<void> updateFolderName(String roomId, String userId, String folderId, String newName) async {
-    await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(folderId)
-        .update({'name': newName});
-  }
-
-  // サブフォルダ名の更新
-  Future<void> updateSubFolderName(String roomId, String userId, String parentFolderId, String subFolderId, String newName) async {
-    await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(parentFolderId)
-        .collection('subfolders')
-        .doc(subFolderId)
-        .update({'name': newName});
-  }
-
-  // フォルダの削除
-  Future<void> deleteFolder(String roomId, String userId, String folderId) async {
-    await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(folderId)
-        .delete();
-  }
-
-  // サブフォルダーの削除
-  Future<void> deleteSubFolder(String roomId, String userId, String parentFolderId, String subFolderId) async {
-    await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(parentFolderId)
-        .collection('subfolders')
-        .doc(subFolderId)
-        .delete();
-  }
-
-  // タスクの取得
-  Future<List<ToDoItem>> fetchToDoItems(String roomId, String userId, String folderId) async {
-    var snapshot = await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(folderId)
+        .collection(sectionName)
+        .doc(folderDoc.id)
         .collection('tasks')
         .get();
 
-    return snapshot.docs.map((doc) {
-      return ToDoItem.fromJson(doc.data(), doc.id);
+    folder.tasks = taskSnapshot.docs.map((taskDoc) {
+      var taskData = taskDoc.data();
+      return ToDoItem(
+        id: taskDoc.id,
+        title: taskData['title'] ?? 'Untitled Task',
+        isDone: taskData['isDone'] ?? false,
+      );
     }).toList();
+
+    folders.add(folder);
   }
 
-  // タスクの追加
-  Future<DocumentReference> addTask(String roomId, String userId, String folderId, Map<String, dynamic> taskData) {
-    return _firestore
+  return folders;
+}
+
+
+
+  // フォルダの追加
+  Future<DocumentReference> addFolder(String roomId, String userId,
+      String sectionName, Map<String, dynamic> folderData) async {
+    return await _firestore
         .collection('rooms')
         .doc(roomId)
         .collection('ItemsPage')
         .doc(userId)
-        .collection('folders')
+        .collection(sectionName)
+        .add(folderData);
+  }
+
+  // フォルダ名の更新
+  Future<void> updateFolderName(String roomId, String userId, String sectionName, String folderId, String newName) async {
+  await FirebaseFirestore.instance
+      .collection('rooms')
+      .doc(roomId)
+      .collection('ItemsPage')
+      .doc(userId)
+      .collection(sectionName)
+      .doc(folderId)
+      .update({'name': newName});
+}
+
+  // フォルダの削除
+  Future<void> deleteFolderWithTasks(String roomId, String userId, String sectionName, String folderId) async {
+  // フォルダ内のタスクを削除
+  var tasksSnapshot = await _firestore
+      .collection('rooms')
+      .doc(roomId)
+      .collection('ItemsPage')
+      .doc(userId)
+      .collection(sectionName)
+      .doc(folderId)
+      .collection('tasks')
+      .get();
+
+  for (var taskDoc in tasksSnapshot.docs) {
+    await taskDoc.reference.delete();
+  }
+
+  // フォルダを削除
+  await _firestore
+      .collection('rooms')
+      .doc(roomId)
+      .collection('ItemsPage')
+      .doc(userId)
+      .collection(sectionName)
+      .doc(folderId)
+      .delete();
+}
+
+
+
+
+  // タスクの追加
+  Future<DocumentReference> addTask(String roomId, String userId,
+      String sectionName, String folderId, Map<String, dynamic> taskData) async {
+    return await _firestore
+        .collection('rooms')
+        .doc(roomId)
+        .collection('ItemsPage')
+        .doc(userId)
+        .collection(sectionName)
         .doc(folderId)
         .collection('tasks')
         .add(taskData);
   }
 
   // タスクの更新
-  Future<void> updateTask(String roomId, String userId, String folderId, String taskId, String newTitle) async {
-    await _firestore
-        .collection('rooms')
-        .doc(roomId)
-        .collection('ItemsPage')
-        .doc(userId)
-        .collection('folders')
-        .doc(folderId)
-        .collection('tasks')
-        .doc(taskId)
-        .update({'title': newTitle});
-  }
+  // FirestoreService.dart
+Future<void> updateTask(String roomId, String userId, String sectionName,
+    String folderId, String taskId, Map<String, dynamic> taskData) async {
+  await _firestore
+      .collection('rooms')
+      .doc(roomId)
+      .collection('ItemsPage')
+      .doc(userId)
+      .collection(sectionName)
+      .doc(folderId)
+      .collection('tasks')
+      .doc(taskId)
+      .update(taskData);
+}
+
 
   // タスクの削除
-  Future<void> deleteTask(String roomId, String userId, String folderId, String taskId) async {
+  Future<void> deleteTask(String roomId, String userId, String sectionName,
+      String folderId, String taskId) async {
     await _firestore
         .collection('rooms')
         .doc(roomId)
         .collection('ItemsPage')
         .doc(userId)
-        .collection('folders')
+        .collection(sectionName)
         .doc(folderId)
         .collection('tasks')
         .doc(taskId)
@@ -200,16 +187,18 @@ class FirestoreService {
   }
 
   // タスクの完了状態を更新
-  Future<void> updateToDoStatus(String roomId, String userId, String folderId, String taskId, bool isDone) async {
+  Future<void> updateToDoStatus(String roomId, String userId,
+      String sectionName, String folderId, String taskId, bool isDone) async {
     await _firestore
         .collection('rooms')
         .doc(roomId)
         .collection('ItemsPage')
         .doc(userId)
-        .collection('folders')
+        .collection(sectionName)
         .doc(folderId)
         .collection('tasks')
         .doc(taskId)
         .update({'isDone': isDone});
   }
+
 }
