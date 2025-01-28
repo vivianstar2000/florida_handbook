@@ -230,7 +230,7 @@ setState(() {}); // 明示的にUIを再描画
               child: GestureDetector(
                 onLongPress: () => _editTask(sectionName, folder.id, task),
                 child: Padding(
-  padding: EdgeInsets.symmetric(vertical: 2.0), // タスク全体の上下マージンを最小限に
+  padding: EdgeInsets.symmetric(vertical: 1.0), // タスク全体の上下マージンを最小限に
   child: Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
