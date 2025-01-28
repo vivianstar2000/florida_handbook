@@ -193,7 +193,7 @@ setState(() {}); // 明示的にUIを再描画
 
   Widget _buildFolderTile(String sectionName, ToDoFolder folder) {
   return Card(
-    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0), // フォルダ間の余白を調整
+    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 12.0), // フォルダ間の余白を調整
     child: Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
@@ -230,62 +230,64 @@ setState(() {}); // 明示的にUIを再描画
               child: GestureDetector(
                 onLongPress: () => _editTask(sectionName, folder.id, task),
                 child: Padding(
-  padding: EdgeInsets.symmetric(vertical: 1.0), // タスク全体の上下マージンを最小限に
-  child: Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      Padding(
-        padding: EdgeInsets.only(left: 20.0), // 左端からの位置を調整
-        child: Transform.scale(
-          scale: 1.0, // チェックボックスのサイズを小さく
-          child: Checkbox(
-            shape: CircleBorder(),
-            value: task.isDone,
-            onChanged: (bool? value) async {
-              await _firestoreService.updateToDoStatus(
-                widget.roomId,
-                widget.userId,
-                sectionName,
-                folder.id,
-                task.id,
-                value ?? false,
-              );
-              await _loadData(sectionName); // 再取得
-            },
-            fillColor: MaterialStateProperty.resolveWith<Color>(
-              (states) {
-                if (states.contains(MaterialState.selected)) {
-                  return Color(0xFFD3B2A7); // チェック時の色
-                }
-                return Colors.transparent; // 非チェック時
-              },
-            ),
-            side: MaterialStateBorderSide.resolveWith(
-              (states) {
-                if (!states.contains(MaterialState.selected)) {
-                  return BorderSide(color: Color(0xFFE5D1CA), width: 2); // 非チェック時枠線
-                }
-                return BorderSide.none; // チェック時枠線なし
-              },
-            ),
-          ),
-        ),
-      ),
-      SizedBox(width: 8.0), // チェックボックスとテキストの間隔を調整
-      Expanded(
-        child: Text(
-          task.title,
-          style: TextStyle(
-            fontFamily: 'NotoSansJP',
-            fontSize: 14, // タスク文字サイズ
-            color: Color(0xFF544740),
-          ),
-        ),
-      ),
-    ],
-  ),
-),
-
+                  padding: EdgeInsets.zero, // タスク間の余白を完全削除
+                  child: Container(
+                    height: 30.0, // タスクの高さを明示的に設定して余白を削減
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 12.0), // 左端からの位置を微調整
+                          child: Transform.scale(
+                            scale: 0.8, // チェックボックスのサイズを調整
+                            child: Checkbox(
+                              shape: CircleBorder(),
+                              value: task.isDone,
+                              onChanged: (bool? value) async {
+                                await _firestoreService.updateToDoStatus(
+                                  widget.roomId,
+                                  widget.userId,
+                                  sectionName,
+                                  folder.id,
+                                  task.id,
+                                  value ?? false,
+                                );
+                                await _loadData(sectionName); // 再取得
+                              },
+                              fillColor: MaterialStateProperty.resolveWith<Color>(
+                                (states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Color(0xFFD3B2A7); // チェック時の色
+                                  }
+                                  return Colors.transparent; // 非チェック時
+                                },
+                              ),
+                              side: MaterialStateBorderSide.resolveWith(
+                                (states) {
+                                  if (!states.contains(MaterialState.selected)) {
+                                    return BorderSide(color: Color(0xFFE5D1CA), width: 1.5); // 非チェック時枠線
+                                  }
+                                  return BorderSide.none; // チェック時枠線なし
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 4.0), // チェックボックスとテキストの間隔を調整
+                        Expanded(
+                          child: Text(
+                            task.title,
+                            style: TextStyle(
+                              fontFamily: 'NotoSansJP',
+                              fontSize: 13, // タスク文字サイズをさらに小さく
+                              color: Color(0xFF544740),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             );
           }).toList(),
