@@ -207,6 +207,7 @@ setState(() {}); // 明示的にUIを再描画
           ),
         ),
         children: [
+          
           ...folder.tasks.map((task) {
             return Dismissible(
               key: Key(task.id),
