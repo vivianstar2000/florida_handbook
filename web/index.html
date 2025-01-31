@@ -94,6 +94,19 @@
 
 </script>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/florida_handbook/service-worker.js')
+      .then(registration => {
+        console.log("Service Worker registered:", registration);
+      })
+      .catch(error => {
+        console.log("Service Worker registration failed:", error);
+      });
+  }
+</script>
+
+
 
   
 </head>

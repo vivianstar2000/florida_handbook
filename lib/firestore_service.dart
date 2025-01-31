@@ -114,7 +114,11 @@ class FirestoreService {
       };
     }).toList();
 
-    await prefs.setString(key, jsonEncode(folderList));
+  String jsonData = jsonEncode(folderList);
+  await prefs.setString(key, jsonData);
+
+  // 🔍 キャッシュが保存されたかログを出力
+  print("Firestoreキャッシュ保存: $jsonData");
   }
 
   // 📌 キャッシュデータを取得する（オフライン時用）
@@ -128,6 +132,8 @@ class FirestoreService {
       print("キャッシュデータがありません。");
       return [];
     }
+
+  print("✅ キャッシュデータ取得成功: $cachedData");
 
     // JSONデコードしてリストに変換
     List<dynamic> jsonData = jsonDecode(cachedData);

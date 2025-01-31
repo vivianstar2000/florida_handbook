@@ -13,10 +13,19 @@ const urlsToCache = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log("📦 キャッシュ追加中: ", urlsToCache);
       return cache.addAll(urlsToCache);
     })
   );
 });
+
+self.addEventListener("fetch", (event) => {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  });
 
 // FirestoreデータをIndexedDBに保存
 async function saveToIndexedDB(collection, data) {
