@@ -40,7 +40,7 @@ Widget _buildFlightCardHNDPNS() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
@@ -87,7 +87,7 @@ Widget _buildFlightCardHNDPNS() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
@@ -148,7 +148,7 @@ Widget _buildSampleCardPNSMCO() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
@@ -194,7 +194,7 @@ Widget _buildSampleCardPNSMCO() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
@@ -255,7 +255,7 @@ Widget _buildSampleCardMCOHND() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
@@ -301,7 +301,7 @@ Widget _buildSampleCardinfo() {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
     elevation: 0,
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Row(
         children: [
           // 1列目: 画像 (中央配置)
