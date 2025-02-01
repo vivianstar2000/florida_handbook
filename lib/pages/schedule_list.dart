@@ -48,7 +48,7 @@ Widget _buildFlightCardHNDPNS() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/airplane.jpg',
+                'assets/airplane.jpg',
                 width: 80,
                 height: 80,
               ),
@@ -95,7 +95,7 @@ Widget _buildFlightCardHNDPNS() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/pensacola.jpg',
+                'assets/pensacola.jpg',
                 width: 130,
                 height: 130,
               ),
@@ -156,7 +156,7 @@ Widget _buildSampleCardPNSMCO() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/airplane.jpg',
+                'assets/airplane.jpg',
                 width: 80,
                 height: 80,
               ),
@@ -202,7 +202,7 @@ Widget _buildSampleCardPNSMCO() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/mco.jpg',
+                'assets/mco.jpg',
                 width: 150,
                 height: 150,
               ),
@@ -263,7 +263,7 @@ Widget _buildSampleCardMCOHND() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/airplane.jpg',
+                'assets/airplane.jpg',
                 width: 80,
                 height: 80,
               ),
@@ -309,7 +309,7 @@ Widget _buildSampleCardinfo() {
             flex: 3,
             child: Center(
               child: Image.asset(
-                '/Users/vivian/florida_handbook/assets/i.jpg',
+                'assets/i.jpg',
                 width: 80,
                 height: 80,
               ),
