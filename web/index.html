@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-
 <html lang="en">
   
 <head>
   <!-- Flutterアプリのベースパス設定 -->
   <base href="$FLUTTER_BASE_HREF">
+  <base id="dynamic-base" href="/">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let isLocal = window.location.hostname === "localhost" || 
+                    window.location.hostname.startsWith("192.168") || 
+                    window.location.hostname.startsWith("172.") || 
+                    window.location.hostname === "0.0.0.0";
+
+      let newHref = isLocal ? "/" : "/florida_handbook/";
+
+      console.log("🔧 Setting base href to:", newHref);
+
+      // `document.head` にあるすべての `<base>` タグを削除して新しいものを追加
+      let oldBaseTag = document.querySelector("base");
+      if (oldBaseTag) {
+        oldBaseTag.remove();
+      }
+      let newBaseTag = document.createElement("base");
+      newBaseTag.setAttribute("href", newHref);
+      document.head.prepend(newBaseTag);
+
+      // `manifest.json` や `service-worker.js` のパスを修正
+      document.addEventListener("DOMContentLoaded", function() {
+  let manifestTag = document.querySelector("link[rel='manifest']");
+  if (manifestTag) {
+    manifestTag.setAttribute("href", newHref + "manifest.json");
+  } else {
+    console.error("🚨 manifest.json の <link> タグが見つかりません！");
+  }
+
+  let iconTag = document.querySelector("link[rel='icon']");
+  if (iconTag) {
+    iconTag.setAttribute("href", newHref + "favicon.png");
+  } else {
+    console.error("🚨 favicon の <link> タグが見つかりません！");
+  }
+});
+
+
+      // Service Worker の登録
+      let swPath = newHref.endsWith("/") ? newHref + "service-worker.js" : newHref + "/service-worker.js";
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register(swPath)
+    .then(registration => console.log("✅ Service Worker registered:", registration))
+    .catch(error => console.error("🚨 Service Worker registration failed:", error));
+}
+    });
+  </script>
 
   <!-- iOS PWA向けの設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +68,6 @@
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
   <!-- iOSアイコン設定 -->
   <link rel="apple-touch-icon" href="assets/app_icon.png">
 
@@ -27,7 +75,20 @@
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>florida_handbook</title>
-  <link rel="manifest" href="manifest.json">
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let isLocal = window.location.hostname === "localhost" || 
+                    window.location.hostname.startsWith("192.168") || 
+                    window.location.hostname.startsWith("172.") || 
+                    window.location.hostname === "0.0.0.0";
+  
+      let baseHref = isLocal ? "/" : "/florida_handbook/";
+  
+      document.getElementById("dynamic-base").setAttribute("href", baseHref);
+      document.querySelector("link[rel='manifest']").setAttribute("href", baseHref + "manifest.json");
+    });
+  </script>
+  
 
   <style>
     html, body {
@@ -55,65 +116,84 @@
     }
   </style>
 
-<script type="module">
-  // Firebase SDKのインポート
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+  <script type="module">
+    // Firebase SDKのインポート
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
 
-  // Firebase設定
-  const firebaseConfig = {
-    apiKey: "AIzaSyCeWQIP17F5R90WRX3CjXmBOlTEasflG4Y",
-    authDomain: "florida-handbook.firebaseapp.com",
-    projectId: "florida-handbook",
-    storageBucket: "florida-handbook.appspot.com",
-    messagingSenderId: "852905012839",
-    appId: "1:852905012839:web:ad22a06bdd5a10aa21eec2",
-    measurementId: "G-FPCMP6RJDM"
-  };
+    // Firebase設定
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeWQIP17F5R90WRX3CjXmBOlTEasflG4Y",
+      authDomain: "florida-handbook.firebaseapp.com",
+      projectId: "florida-handbook",
+      storageBucket: "florida-handbook.appspot.com",
+      messagingSenderId: "852905012839",
+      appId: "1:852905012839:web:ad22a06bdd5a10aa21eec2",
+      measurementId: "G-FPCMP6RJDM"
+    };
 
-  // Firebaseアプリの初期化
-  window.app = initializeApp(firebaseConfig);
-  console.log("Firebase initialized:", window.app);
+    // Firebaseアプリの初期化
+    window.app = initializeApp(firebaseConfig);
+    console.log("Firebase initialized:", window.app);
 
-  // Firebaseサービスの初期化
-  window.auth = getAuth(window.app);
-  window.analytics = getAnalytics(window.app);
+    // Firebaseサービスの初期化
+    window.auth = getAuth(window.app);
+    window.analytics = getAnalytics(window.app);
 
-  console.log("Auth service initialized:", window.auth);
-  console.log("Analytics initialized:", window.analytics);
+    console.log("Auth service initialized:", window.auth);
+    console.log("Analytics initialized:", window.analytics);
 
-  // ユーザーの認証状態を監視
-  onAuthStateChanged(window.auth, (user) => {
-    if (user) {
-      console.log("User is signed in:", user.uid);
-    } else {
-      console.log("No user signed in.");
+    // ユーザーの認証状態を監視
+    onAuthStateChanged(window.auth, (user) => {
+      if (user) {
+        console.log("User is signed in:", user.uid);
+      } else {
+        console.log("No user signed in.");
+      }
+    });
+
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(registration => {
+          console.log("Service Worker registered:", registration);
+        })
+        .catch(error => {
+          console.log("Service Worker registration failed:", error);
+        });
     }
-  });
+  </script>
 
-</script>
+  <script>
+    if (window.location.pathname === "/florida_handbook") {
+      window.location.replace("/florida_handbook/");
+    }
+  </script>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/florida_handbook/service-worker.js')
-      .then(registration => {
-        console.log("Service Worker registered:", registration);
-      })
-      .catch(error => {
-        console.log("Service Worker registration failed:", error);
-      });
-  }
-</script>
+<link rel="manifest" href="/florida_handbook/manifest.json">
 
 
 
-  
 </head>
 
 <body>
   <div class="app-container">
-    <script src="flutter_bootstrap.js" async></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+  let baseHref = document.querySelector("base").getAttribute("href");
+  let scriptPath = baseHref.endsWith("/") ? baseHref + "flutter_bootstrap.js" : baseHref + "/flutter_bootstrap.js";
+
+  let scriptTag = document.createElement("script");
+  scriptTag.setAttribute("src", scriptPath);
+  scriptTag.setAttribute("async", true);
+  document.body.appendChild(scriptTag);
+});
+
+    </script>
   </div>
 </body>
+
 </html>

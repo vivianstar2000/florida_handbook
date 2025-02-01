@@ -1,0 +1,9 @@
+name: florida_handbook
+resources:
+  - /index.html
+  - /flutter_bootstrap.js
+  - /main.dart.js
+  - /manifest.json
+  - /favicon.png
+  - /assets/FontManifest.json
+  - /assets/AssetManifest.bin.json

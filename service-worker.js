@@ -1,19 +1,38 @@
 const CACHE_NAME = "florida-handbook-cache-v1";
 const FIRESTORE_CACHE_NAME = "florida-handbook-firestore-cache";
 const urlsToCache = [
-  "/florida_handbook/",
-  "/florida_handbook/index.html",
-  "/florida_handbook/styles.css",
-  "/florida_handbook/app.js",
-  "/florida_handbook/icons/Icon-192.png",
-  "/florida_handbook/icons/Icon-512.png"
+    "/",
+    "/index.html",
+    "/flutter_bootstrap.js",
+    "/main.dart.js",
+    "/manifest.json",
+    "/favicon.png",
+    "/assets/FontManifest.json",
+    "/assets/AssetManifest.bin.json"
 ];
 
 // Service Worker インストール時にキャッシュ
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log("📦 キャッシュ追加中: ", urlsToCache);
       return cache.addAll(urlsToCache);
+    })
+  );
+});
+
+// 新しいバージョンがあればキャッシュを更新
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            console.log("🧹 古いキャッシュを削除: ", cache);
+            return caches.delete(cache);
+          }
+        })
+      );
     })
   );
 });
@@ -57,7 +76,10 @@ async function getFromIndexedDB(collection) {
 
 // オフライン時にFirestoreのデータをIndexedDBから取得
 self.addEventListener("fetch", (event) => {
-  if (event.request.url.includes("firestore.googleapis.com")) {
+  const requestUrl = event.request.url;
+
+  // Firestore APIのリクエストならIndexedDBからデータを取得
+  if (requestUrl.includes("firestore.googleapis.com")) {
     event.respondWith(
       getFromIndexedDB("firestore-data").then((data) => {
         return new Response(JSON.stringify(data), {
@@ -65,11 +87,16 @@ self.addEventListener("fetch", (event) => {
         });
       })
     );
-  } else {
-    event.respondWith(
-      caches.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      })
-    );
+    return; // ここで処理を終了
   }
+
+  // 通常のキャッシュ処理
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request).catch(() => {
+        console.log("⚠️ オフライン - キャッシュにないリソース: ", event.request.url);
+        return caches.match("/index.html"); // オフライン時にindex.htmlを返す
+      });
+    })
+  );
 });
