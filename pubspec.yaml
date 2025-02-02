@@ -132,6 +132,10 @@ flutter:
     - assets/pensacola.png
     - assets/mco.png
     - assets/i.png
+    - assets/iconbox/home.png
+    - assets/iconbox/train.png
+    - assets/iconbox/sea-turtle.png
+    - assets/iconbox/airplane.png
 
 
 
@@ -150,6 +154,12 @@ flutter:
         - asset: assets/fonts/Nunito-Italic-VariableFont_wght.ttf
         - asset: assets/fonts/Nunito-VariableFont_wght.ttf
           weight: 700
+        - asset: assets/fonts/Nunito-Black.ttf
+        - asset: assets/fonts/Nunito-Bold.ttf
+        - asset: assets/fonts/Nunito-ExtraBold.ttf
+        - asset: assets/fonts/Nunito-Medium.ttf
+        - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-SemiBold.ttf
     - family: Itim
       fonts:
         - asset: assets/fonts/Itim-Regular.ttf

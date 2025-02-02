@@ -5,65 +5,86 @@ class PlanPage29 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('2.8 (Sat.) Itinerary'),
-        centerTitle: true,
+        title: Text(
+          '2.9 (Sun.)',
+          style: TextStyle(
+            fontFamily: 'Nunito',
+            fontSize: 34,
+            fontWeight: FontWeight.w800,
+            color: Color(0xFFCCA092),
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: EdgeInsets.zero,
+        child: ListView(
           children: [
-            Text(
-              'Schedule for 2.8 (Sat.)',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16),
-            ScheduleItem(time: '08:00 AM', event: 'Breakfast at hotel'),
-            ScheduleItem(time: '10:00 AM', event: 'Visit local market'),
-            ScheduleItem(time: '12:30 PM', event: 'Lunch at seafood restaurant'),
-            ScheduleItem(time: '03:00 PM', event: 'Explore historical sites'),
-            ScheduleItem(time: '06:00 PM', event: 'Dinner with family'),
-            ScheduleItem(time: '08:00 PM', event: 'Relax at hotel'),
+            _buildday1Card1(),
           ],
         ),
       ),
     );
   }
-}
 
-class ScheduleItem extends StatelessWidget {
-  final String time;
-  final String event;
-
-  ScheduleItem({required this.time, required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+  // 1つ目のカード: 飛行機アイコン + HND → PNS
+Widget _buildday1Card1() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: Row(
         children: [
-          Text(
-            time,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [ Image.asset(
+                'assets/iconbox/home.png',
+                width: 30,
+                height: 30,
+              ),],
             ),
           ),
-          SizedBox(width: 16),
+          // 2列目: 時間
           Expanded(
-            child: Text(
-              event,
+            flex: 3,
+            child: Center(
+              child:Text(
+                '03:00 a.m.\n-\n06:00 a.m.',
               style: TextStyle(
-                fontSize: 18,
-              ),
+                    fontFamily: 'Nunito',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFFa5a4a4),
+                  ),),
+            ),
+          ),
+          // 2列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'HND → PNS',
+                  style: TextStyle(
+                    fontFamily: 'NotoSansJP',
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFd3b2a7),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

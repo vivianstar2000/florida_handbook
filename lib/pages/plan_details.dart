@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:florida_handbook/pages/plan_pages/2.8.dart';
 import 'package:florida_handbook/pages/plan_pages/2.9.dart';
@@ -46,36 +47,103 @@ class PlanDetailsPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: days.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => dayPages[days[index]]!,
+      body: Stack(
+        children: [
+          // リストビュー（元のリストを表示）
+          ListView.builder(
+            itemCount: days.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => dayPages[days[index]]!,
+                    ),
+                  );
+                },
+                child: Card(
+                  margin: EdgeInsets.symmetric(horizontal: 120, vertical: 8),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.5, // 画面幅の50%に設定
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    alignment: Alignment.center,
+                    child: Text(
+                      days[index],
+                      style: TextStyle(
+                        fontFamily: 'Nunito',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFFa5a4a4),
+                      ),
+                    ),
+                  ),
                 ),
               );
             },
-            child: Card(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                alignment: Alignment.center,
-                child: Text(
-                  days[index],
-                  style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6d615b),
-                  ),
-                ),
+          ),
+
+          // 画像を上から配置0
+          Positioned(
+            top: 10,  // 上から50px
+            left: 40, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 3, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/airplane.png',
+                width: 50,  // 幅
+                height: 50, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
               ),
             ),
-          );
-        },
+            ),
+          ),
+
+          // 画像を上から配置1
+          Positioned(
+            top: 70,  // 上から50px
+            right: 10, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 12, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/pensacola.png',
+                width: 100,  // 幅
+                height: 100, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
+
+
+          // 画像を上から配置2
+          Positioned(
+            top: 160,  // 上から50px
+            left: 10, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 20, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/sea-turtle.png',
+                width: 100,  // 幅
+                height: 100, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
+        ],
       ),
     );
   }
