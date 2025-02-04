@@ -143,6 +143,86 @@ class PlanDetailsPage extends StatelessWidget {
             ),
             ),
           ),
+
+          // 画像を上から配置3
+          Positioned(
+            top: 300,  // 上から50px
+            right: 20, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 20, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/camper-van.png',
+                width: 80,  // 幅
+                height: 80, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
+
+          // 画像を上から配置4
+          Positioned(
+            top: 400,  // 上から50px
+            left: 10, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 20, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/passport.png',
+                width: 100,  // 幅
+                height: 100, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
+
+          // 画像を上から配置5
+          Positioned(
+            top: 550,  // 上から50px
+            right: 15, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 20, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/suitcase.png',
+                width: 80,  // 幅
+                height: 80, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
+
+          // 画像を上から配置5
+          Positioned(
+            top: 630,  // 上から50px
+            left: 15, // 右から20px
+            child: Opacity(
+              opacity: 1, // 透明度を70%にする
+              child: 
+              Transform.rotate(
+  angle: pi / 50, // 45度回転（自由に変更可能）
+  child:
+  Image.asset(
+                'assets/iconbox/castle.png',
+                width: 80,  // 幅
+                height: 80, // 高さ
+                fit: BoxFit.cover, // 画像の表示方法を調整
+              ),
+            ),
+            ),
+          ),
         ],
       ),
     );

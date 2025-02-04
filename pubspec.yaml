@@ -108,34 +108,9 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/handbook表紙.jpg
-    - assets/schedule.jpg
-    - assets/plan.jpg
-    - assets/items.jpg
-    - assets/notes.jpg
-    - assets/english.jpg
-    - assets/family.jpg
-    - assets/app_icon.jpg
-    - assets/dennis.jpeg
-    - assets/grandma.jpeg
-    - assets/grandpa.jpeg
-    - assets/melinda.jpeg
-    - assets/marissa.jpeg
-    - assets/anthony.jpeg
-    - assets/makayla.jpeg
-    - assets/ava.jpeg
-    - assets/alena.jpeg
-    - assets/ayden.jpeg
-    - assets/alex.jpeg
-    - assets/captain.jpg
-    - assets/airplane.png
-    - assets/pensacola.png
-    - assets/mco.png
-    - assets/i.png
-    - assets/iconbox/home.png
-    - assets/iconbox/train.png
-    - assets/iconbox/sea-turtle.png
-    - assets/iconbox/airplane.png
+    - assets/
+    - assets/assets/
+    - assets/iconbox/
 
 
 
