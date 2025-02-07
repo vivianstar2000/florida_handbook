@@ -45,9 +45,9 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.black),  // アイコンの色
         ),
         colorScheme: ColorScheme.fromSwatch(
-    primarySwatch: Colors.brown,  // 近い色をベースに
-    accentColor: Color(0xFFD3B2A7),  // アクセントカラーを設定
-  ),
+  primarySwatch: Colors.grey,  // 近い色をベースに
+  accentColor: Color(0xFFD3B2A7),  // アクセントカラーを設定（⚠️ 非推奨）
+),
       ),
       initialRoute: '/',// 最初にスプラッシュ画面を表示
       routes: {

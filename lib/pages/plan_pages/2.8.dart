@@ -37,6 +37,13 @@ class PlanPage28 extends StatelessWidget {
             _buildday1Card13(),
             _buildday1Card14(),
             _buildday1Card15(),
+            _buildday1Card16(),
+            _buildday1Card17(),
+            _buildday1Card18(),
+            _buildday1Card19(),
+            _buildday1Card20(),
+            _buildday1Card21(),
+            _buildday1Card22(),
           ],
         ),
       ),
@@ -409,7 +416,7 @@ Widget _buildday1Card5() {
                         ),
                       ),
                       TextSpan(
-                        text: 'faceidの設定ができたらしたい。水は持って入れないよ。\n※預け入れ荷物のバーコードをスクショする!',
+                        text: 'faceidの設定ができたらしたい。水は持って入れないよ。\n※預け入れ荷物のバーコードをスクショする!\n荷物の預け入れの締め切りは09:55 a.m.',
                         style: TextStyle(
                           fontFamily: 'NotoSansJP',
                           fontSize: 12, // 小さくしたいフォントサイズ
@@ -565,7 +572,7 @@ Widget _buildday1Card7() {
                         ),
                       ),
                       TextSpan(
-                        text: '自分の番が来るまで待つ\n多分最後の回',
+                        text: '10:30 a.m.から搭乗開始\n　自分の番が来るまで待つ\n　多分最後の回',
                         style: TextStyle(
                           fontFamily: 'NotoSansJP',
                           fontSize: 12, // 小さくしたいフォントサイズ
@@ -1269,6 +1276,619 @@ Widget _buildday1Card15() {
                       TextSpan(
                         text: '''自分の番が来るまで待つ
   今回は多分最後ではないはず...''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 16つ目のカード: 離陸
+Widget _buildday1Card16() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/ririku.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                '13:01 p.m.',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFd78282),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'DFW → PNS\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 24, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''
+ ≫詳細
+　ダラス・フォートワース国際空港
+                                                      ターミナルB,DFW
+  　　 [AA3490]
+  　　  Embraer 175
+
+  　　 [seats] vivian ▶︎ 17F
+  　　　 　 　ryudai ▶︎ 17D''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 17つ目のカード: 着陸
+Widget _buildday1Card17() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 0, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/tyakuriku.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                '14:46 p.m.',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFd78282),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'DFW → PNS\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 24, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''
+ ≫詳細
+　ペンサコーラ国際空港,PNS''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 18つ目のカード: パパに会う
+Widget _buildday1Card18() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+  SizedBox(height: 0,),
+  Container(
+    width: 50, // 正方形のサイズ指定
+    height: 50,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle, // 丸い形にする
+      image: DecorationImage(
+        image: AssetImage('assets/dennis.jpeg'),
+        fit: BoxFit.cover, // 枠いっぱいに画像を表示
+      ),
+    ),
+  ),
+],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                '15:00 p.m.',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFa5a4a4),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'パパが迎えに来る\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 16, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''
+　パパが迎えにきたら、baggage claimに行く''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 19つ目のカード: お家に行く
+Widget _buildday1Card19() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/car.png',
+                  width: 40,
+                  height: 40,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                'next',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFa5a4a4),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '車で家に向かう\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 16, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''多分ここで色々話すと思うから頑張って！''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 20つ目のカード: お土産
+Widget _buildday1Card20() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/shopping.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                'next',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFa5a4a4),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'お土産を渡す\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 16, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''みんながいる時がいいな''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 21つ目のカード:夕飯
+Widget _buildday1Card21() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/restaurant.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                'next',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFa5a4a4),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '夕飯\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 16, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''絶対ジャンキーだw''',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 12, // 小さくしたいフォントサイズ
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF737373),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// 22つ目のカード:夕飯
+Widget _buildday1Card22() {
+  return Card(
+    color: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    elevation: 0,
+    child: Padding(
+      padding: const EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start, // ← ここを追加
+        children: [
+          // 1列目: アイコン
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start, // 追加
+              children: [
+                SizedBox(height: 5,),
+                Image.asset(
+                  'assets/iconbox/night.png',
+                  width: 30,
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+          // 2列目: 時間
+          Expanded(
+            flex: 3,
+            child: Column( // Center ではなく Column に変更
+            mainAxisAlignment: MainAxisAlignment.start, // 追加Text(
+            children: [
+              SizedBox(height: 10,),
+              Text(
+                '23:00 p.m.',
+                style: TextStyle(
+                  fontFamily: 'Nunito',
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: Color(0xFFa5a4a4),
+                ),
+              ),
+            ],
+            ),
+          ),
+          // 3列目: テキスト1 (左寄せ)
+          Expanded(
+            flex: 7,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '寝るよー\n',
+                        style: TextStyle(
+                          fontFamily: 'NotoSansJP',
+                          fontSize: 16, // メインのフォントサイズ
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFd3b2a7),
+                        ),
+                      ),
+                      TextSpan(
+                        text: '''　次の日は06:00 a.m.には起きよー！
+    目覚ましの音は控えめにしてね！''',
                         style: TextStyle(
                           fontFamily: 'NotoSansJP',
                           fontSize: 12, // 小さくしたいフォントサイズ
